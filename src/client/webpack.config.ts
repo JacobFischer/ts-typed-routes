@@ -1,12 +1,16 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import * as webpack from "webpack";
+import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
 
 export default (
     env: undefined,
     options: webpack.Configuration,
 ): webpack.Configuration => ({
-    entry: "./src/index.tsx",
+    devtool: options.mode === "development"
+        ? "inline-source-map"
+        : false,
+    entry: resolve(__dirname, "./index.tsx"),
     module: {
         rules: [
             {
@@ -16,13 +20,20 @@ export default (
             },
         ],
     },
+    optimization: {
+        sideEffects: true,
+        splitChunks: {
+            chunks: "all",
+        },
+        usedExports: true,
+    },
     output: {
-        filename: "bundle.js",
-        path: resolve(__dirname, "dist"),
+        filename: join(BUNDLE_DIR, "[name].js"),
+        path: resolve(__dirname, "../../dist/client"),
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Single Page Application",
+            templateContent: HTML_START + HTML_MID + HTML_END,
         }),
     ],
     resolve: {
