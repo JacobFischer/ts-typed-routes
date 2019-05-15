@@ -20,7 +20,7 @@ export async function setupExpress(): Promise<number> {
         const bundlePath = join(__dirname, "../client/", BUNDLE_DIR);
         const dir = await readdir(bundlePath);
         for (const filename of dir) {
-            const bundled = join(BUNDLE_DIR, filename);
+            const bundled = join(BUNDLE_DIR, filename).replace(/\\/g, "/");;
             bundles.push(bundled);
 
             app.get(`/${bundled}`, (req, res) => res.sendFile(join(bundlePath, filename)));
