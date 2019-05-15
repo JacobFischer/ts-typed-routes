@@ -1,35 +1,41 @@
 import cors from "cors";
 import express from "express";
-import { readdir } from "fs-extra";
+import { readdir, readFile } from "fs-extra";
 import { join } from "path";
 import * as React from "react";
 import * as ReactDOMServer from "react-dom/server";
+import { preloadAll } from "react-loadable";
 import { StaticRouter } from "react-router";
 import { App } from "../shared/components/App";
 import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
 
 const PORT = 8080;
 const CLIENT_SIDE_RENDERING = true; // TODO: read from config or env file
+const CLIENT_DIST = join(__dirname, "../client/");
+const BUNDLE_PATH = join(CLIENT_DIST, BUNDLE_DIR);
 
 export async function setupExpress(): Promise<number> {
     const app = express();
     app.use(cors());
 
-    const bundles = new Array<string>();
+    let scripts = "";
     if (CLIENT_SIDE_RENDERING) {
-        const bundlePath = join(__dirname, "../client/", BUNDLE_DIR);
-        const dir = await readdir(bundlePath);
+        const dir = await readdir(BUNDLE_PATH);
         for (const filename of dir) {
             const bundled = join(BUNDLE_DIR, filename).replace(/\\/g, "/");;
-            bundles.push(bundled);
 
-            app.get(`/${bundled}`, (req, res) => res.sendFile(join(bundlePath, filename)));
+            app.get(`/${bundled}`, (req, res) => res.sendFile(join(BUNDLE_PATH, filename)));
         }
+
+        const indexHtml = (await readFile(join(CLIENT_DIST, "index.html"))).toString();
+        const matches = indexHtml.match(/<script(.*?)<\/script>/g);
+        scripts = matches
+            ? matches.join("")
+            : "";
     }
 
-    const bundleScripts = bundles
-        .map((bundle) => `<script type="text/javascript" src="${bundle}"></script>`)
-        .join("");
+    // preload all react-loadable components
+    await preloadAll();
 
     app.get("*", (req, res) => {
         const context = {};
@@ -46,7 +52,7 @@ export async function setupExpress(): Promise<number> {
         componentStream.on("end", () => {
             res.write(HTML_MID);
             if (CLIENT_SIDE_RENDERING) {
-                res.write(bundleScripts);
+                res.write(scripts);
             }
             res.write(HTML_END);
             res.end();

@@ -3,8 +3,6 @@ import { join, resolve } from "path";
 import * as webpack from "webpack";
 import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
 
-console.log("  ->>>>>", resolve(__dirname));
-
 export default (
     env: undefined,
     options: webpack.Configuration,
