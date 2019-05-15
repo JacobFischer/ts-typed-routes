@@ -6,8 +6,8 @@ import * as React from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { preloadAll } from "react-loadable";
 import { StaticRouter } from "react-router";
-import { App } from "../shared/components/App";
 import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
+import { App } from "../shared/components/App";
 
 const PORT = 8080;
 const CLIENT_SIDE_RENDERING = true; // TODO: read from config or env file
@@ -22,7 +22,7 @@ export async function setupExpress(): Promise<number> {
     if (CLIENT_SIDE_RENDERING) {
         const dir = await readdir(BUNDLE_PATH);
         for (const filename of dir) {
-            const bundled = join(BUNDLE_DIR, filename).replace(/\\/g, "/");;
+            const bundled = join(BUNDLE_DIR, filename).replace(/\\/g, "/");
 
             app.get(`/${bundled}`, (req, res) => res.sendFile(join(BUNDLE_PATH, filename)));
         }

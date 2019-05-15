@@ -5,18 +5,13 @@ import { About } from "./About";
 import { NotFound } from "./NotFound";
 import { SomePage } from "./SomePage";
 
+const delay = async (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 const Loading = () => <em>Loading...</em>;
-
-function delay(time: number): Promise<void> {
-    return new Promise((resolve) => {
-        setTimeout(resolve, time);
-    });
-}
 
 const LoadableHome = Loadable({
     loader: async () => {
-        await delay(5000);
-        return import("./Home")
+        await delay(1000);
+        return import("./Home");
     },
     loading: Loading,
     render: ({ Home }, props) => <Home {...props} />,

@@ -1,0 +1,276 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the About page 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <h2>
+    About
+  </h2>,
+  <p>
+    <strong>
+      Jacob Fischer
+    </strong>
+     made this page! It's simple boilerplate to get up and moving ASAP.
+  </p>,
+]
+`;
+
+exports[`renders the NotFound page on bad routes 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <h2>
+    Not Found
+  </h2>,
+  <pre>
+    Sorry, but we couldn't find anything here!
+  </pre>,
+]
+`;
+
+exports[`renders the SomePage page 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <h3>
+    SomePage
+  </h3>,
+  <p>
+    This is just some random page.
+  </p>,
+  <p>
+    <em>
+      I hope this gives you an idea of where to go with this project!
+    </em>
+  </p>,
+]
+`;
+
+exports[`renders the base App 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <em>
+    Loading...
+  </em>,
+]
+`;
+
+exports[`renders the index Home page 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <h1>
+    Home
+  </h1>,
+  <p>
+    Welcome to the index page!
+  </p>,
+]
+`;
+
+exports[`renders with React-Loadable once preloaded 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <h1>
+    Home
+  </h1>,
+  <p>
+    Welcome to the index page!
+  </p>,
+]
+`;
