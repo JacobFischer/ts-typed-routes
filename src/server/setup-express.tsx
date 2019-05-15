@@ -5,7 +5,7 @@ import { join } from "path";
 import * as React from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router";
-import { App } from "../shared/App";
+import { App } from "../shared/components/App";
 import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
 
 const PORT = 8080;

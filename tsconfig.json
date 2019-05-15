@@ -3,6 +3,7 @@
         "target": "esnext",
         "module": "commonjs",
         "lib": ["esnext"],
+        "jsx": "react",
         "outDir": "dist",
 
         "strict": true,
