@@ -2,12 +2,13 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "commonjs",
-        "lib": ["esnext"],
+        "lib": ["dom", "esnext"],
         "jsx": "react",
         "outDir": "dist",
 
         "strict": true,
-        "sourceMap": true,
+        // "sourceMap": true,
         "esModuleInterop": true,
+        "inlineSourceMap": true,
     }
 }

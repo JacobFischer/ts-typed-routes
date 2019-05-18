@@ -1,6 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders the About page 1`] = `
+exports[`Component: App renders 1`] = `
+Array [
+  <ul>
+    <li>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+        onClick={[Function]}
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/some-page"
+        onClick={[Function]}
+      >
+        Some Page
+      </a>
+    </li>
+    <li>
+      <a
+        href="/not-found"
+        onClick={[Function]}
+      >
+        Dead link
+      </a>
+    </li>
+  </ul>,
+  <em>
+    Loading...
+  </em>,
+]
+`;
+
+exports[`Component: App renders the About page 1`] = `
 Array [
   <ul>
     <li>
@@ -48,7 +90,7 @@ Array [
 ]
 `;
 
-exports[`renders the NotFound page on bad routes 1`] = `
+exports[`Component: App renders the NotFound page on bad routes 1`] = `
 Array [
   <ul>
     <li>
@@ -93,7 +135,7 @@ Array [
 ]
 `;
 
-exports[`renders the SomePage page 1`] = `
+exports[`Component: App renders the SomePage page 1`] = `
 Array [
   <ul>
     <li>
@@ -143,49 +185,7 @@ Array [
 ]
 `;
 
-exports[`renders the base App 1`] = `
-Array [
-  <ul>
-    <li>
-      <a
-        href="/"
-        onClick={[Function]}
-      >
-        Home
-      </a>
-    </li>
-    <li>
-      <a
-        href="/about"
-        onClick={[Function]}
-      >
-        About
-      </a>
-    </li>
-    <li>
-      <a
-        href="/some-page"
-        onClick={[Function]}
-      >
-        Some Page
-      </a>
-    </li>
-    <li>
-      <a
-        href="/not-found"
-        onClick={[Function]}
-      >
-        Dead link
-      </a>
-    </li>
-  </ul>,
-  <em>
-    Loading...
-  </em>,
-]
-`;
-
-exports[`renders the index Home page 1`] = `
+exports[`Component: App renders the index Home page 1`] = `
 Array [
   <ul>
     <li>
@@ -230,7 +230,7 @@ Array [
 ]
 `;
 
-exports[`renders with React-Loadable once preloaded 1`] = `
+exports[`Component: App renders with React-Loadable once preloaded 1`] = `
 Array [
   <ul>
     <li>
