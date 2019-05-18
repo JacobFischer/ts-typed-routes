@@ -32,6 +32,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "\\\\node_modules\\\\",
     "(babel|webpack)\.config\.(js|ts)",
+    "src/(client|server)/index\.(tsx?)",
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports

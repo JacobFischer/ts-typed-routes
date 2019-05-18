@@ -1,7 +1,7 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
 import * as webpack from "webpack";
-import { BUNDLE_DIR, HTML_END, HTML_MID, HTML_START } from "../shared/build";
+import { JS_BUNDLE_DIR, templateHtml } from "../shared/build";
 
 export default (
     env: undefined,
@@ -11,6 +11,8 @@ export default (
         ? "inline-source-map"
         : false,
     entry: [
+        "core-js/modules/es6.promise",
+        "core-js/modules/es6.array.iterator",
         "@babel/polyfill/dist/polyfill.js", // polyfill new ES functions for babel
         resolve(__dirname, "./index.tsx"),
     ],
@@ -49,12 +51,12 @@ export default (
         usedExports: true,
     },
     output: {
-        filename: join(BUNDLE_DIR, "[name].js"),
+        filename: join(JS_BUNDLE_DIR, "[name].js"),
         path: resolve(__dirname, "../../dist/client"),
     },
     plugins: [
         new HtmlWebpackPlugin({
-            templateContent: HTML_START + HTML_MID + HTML_END,
+            templateContent: templateHtml(),
         }),
     ],
     resolve: {
