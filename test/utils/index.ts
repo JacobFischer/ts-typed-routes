@@ -1,5 +1,15 @@
+import { stat } from "fs-extra";
 import { Server } from "http";
 import { createServer } from "net";
+import { join } from "path";
+
+const CLIENT_DIST_DIR = join(__dirname, "../../dist/client/");
+export async function getClientDistDir() {
+    if (!(await stat(CLIENT_DIST_DIR)).isDirectory()) {
+        throw new Error("Client dist bundle not build! Tests cannot run!");
+    }
+    return CLIENT_DIST_DIR;
+}
 
 export const closeServer = (server: Server) => new Promise((resolve, reject) => {
   server.close((err) => {

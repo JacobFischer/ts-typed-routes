@@ -1,6 +1,4 @@
-import { stat } from "fs-extra";
 import { Server } from "http";
-import { join } from "path";
 import puppeteer from "puppeteer";
 import React from "react";
 import { renderToString } from "react-dom/server";
@@ -9,17 +7,13 @@ import { getScriptsFromIndexHtml } from "../../src/server/build";
 import { start } from "../../src/server/start";
 import { templateHtml } from "../../src/shared/build";
 import { App } from "../../src/shared/components/App";
-import { closeServer, isPortTaken } from "../utils";
-
-const DIST_BUNDLE_DIR = join(__dirname, "../../dist/client/");
+import { closeServer, getClientDistDir, isPortTaken } from "../utils";
 
 let browser = undefined as any as puppeteer.Browser; // will be set first below
+let clientDistDir = "";
 beforeAll(async () => {
     browser = await puppeteer.launch();
-
-    if (!(await stat(DIST_BUNDLE_DIR)).isDirectory()) {
-        throw new Error("Cannot test server without client being build for client side rendering tests");
-    }
+    clientDistDir = await getClientDistDir();
 });
 
 afterAll(async () => {
@@ -28,7 +22,7 @@ afterAll(async () => {
 
 describe("Server", () => [
     ["with only server side rendering", 8080, null] as const,
-    ["with client side rendering", 9090, DIST_BUNDLE_DIR] as const,
+    ["with client side rendering", 9090, clientDistDir] as const,
 ].forEach(([description, port, clientSideRendering]) => describe(description, () => {
     it("has a port to bind to", async () => {
         expect(port).toBeGreaterThan(0);
