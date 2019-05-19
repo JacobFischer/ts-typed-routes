@@ -1,5 +1,3 @@
-console.log(" >>>", "hi from the config");
-
 module.exports = {
   presets: [
       ["@babel/preset-env", { "shippedProposals": true }],
