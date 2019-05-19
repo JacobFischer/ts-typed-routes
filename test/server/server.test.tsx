@@ -21,9 +21,13 @@ afterAll(async () => {
 });
 
 describe("Server", () => [
-    ["with only server side rendering", 8080, null] as const,
-    ["with client side rendering", 9090, clientDistDir] as const,
+    ["with only server side rendering", 8080, false] as const,
+    ["with client side rendering", 9090, true] as const,
 ].forEach(([description, port, clientSideRendering]) => describe(description, () => {
+    const getDistDir = () => clientSideRendering
+        ? clientDistDir // wrap in function due to async before all above
+        : null;
+
     it("has a port to bind to", async () => {
         expect(port).toBeGreaterThan(0);
         const portTaken = await isPortTaken(port);
@@ -31,7 +35,7 @@ describe("Server", () => [
     });
 
     it("starts and closes", async () => {
-        const server = await start(port, clientSideRendering);
+        const server = await start(port, getDistDir());
         expect(server).toBeInstanceOf(Server);
         expect(server.listening).toBe(true);
 
@@ -40,7 +44,7 @@ describe("Server", () => [
     });
 
     it("serves the page", async () => {
-        const server = await start(port, clientSideRendering);
+        const server = await start(port, getDistDir());
         const location = "/";
         const page = await browser.newPage();
         await page.setCacheEnabled(false);
@@ -61,7 +65,7 @@ describe("Server", () => [
                 </StaticRouter>,
             ),
             clientSideRendering
-                ? await getScriptsFromIndexHtml(clientSideRendering)
+                ? await getScriptsFromIndexHtml(getDistDir() || "")
                 : "",
         );
 
