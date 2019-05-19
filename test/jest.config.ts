@@ -1,8 +1,11 @@
-import { GlobalConfig, ProjectConfig } from "@jest/types/build/Config";
+import { DefaultOptions } from "@jest/types/build/Config";
+import { existsSync, writeFileSync } from "fs";
+import { resolve } from "path";
+
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
-const config: Partial<ProjectConfig & GlobalConfig> = {
+const config: Partial<DefaultOptions> = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -23,7 +26,7 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "src/**/*.{js,jsx,ts,tsx}",
   ],
 
   // The directory where Jest should output its coverage files
@@ -32,7 +35,7 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     "\\\\node_modules\\\\",
-    "(babel|webpack)\.config\.(js|ts)",
+    "(babel|webpack|jest)\.config\.(js|ts)",
     "src/(client|server)/index\.(tsx?)",
   ],
 
@@ -109,7 +112,7 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  // rootDir: "./test/",
+  rootDir: resolve("./"),
 
   // A list of paths to directories that Jest should use to search for files in
   // roots: [
@@ -144,7 +147,12 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: ["/lib/", "/node_modules/", "/test/utils"],
+  testPathIgnorePatterns: [
+    "/lib/",
+    "/node_modules/",
+    "/test/utils",
+    "([^\s]+).config.(js|ts|tsx)",
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   testRegex: ["(/test/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"],
@@ -162,9 +170,9 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: [
-    ["^.+\\.tsx?$", "ts-jest"],
-  ],
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths,
   // matched files will skip transformation
@@ -186,4 +194,15 @@ const config: Partial<ProjectConfig & GlobalConfig> = {
   // watchman: true,
 };
 
-module.exports = config;
+if (!existsSync("./dist/")) {
+    // tslint:disable-next-line:no-console
+    console.error(`
+———
+🚨 ERROR: dist/ does not exist. Please build the app to properly test it.
+———`);
+    process.exit(1);
+}
+
+// jest does not natively support TypeScript, but we want that type safety!
+// so we'll write a json file jest is ok with to dist
+writeFileSync("./dist/jest.config.json", JSON.stringify(config));

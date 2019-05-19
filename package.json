@@ -78,6 +78,8 @@
     "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "tslint --project src/client/tsconfig.json --config tslint.json",
     "lint:server": "tslint --project src/server/tsconfig.json --config tslint.json",
-    "test": "jest --env=node --colors --coverage test"
+    "test:build": "ts-node ./test/jest.config.ts",
+    "test:jest": "jest --env=node --config ./dist/jest.config.json --colors --coverage test",
+    "test": "npm run test:build && npm run test:jest"
   }
 }
