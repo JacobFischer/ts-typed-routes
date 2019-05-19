@@ -1,7 +1,8 @@
+import { GlobalConfig, ProjectConfig } from "@jest/types/build/Config";
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
-module.exports = {
+const config: Partial<ProjectConfig & GlobalConfig> = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -12,7 +13,7 @@ module.exports = {
   // browser: false,
 
   // The directory where Jest should store its cached dependency information
-  // cacheDirectory: "C:\\Users\\Jacob\\AppData\\Local\\Temp\\jest",
+  // cacheDirectory: "some/path/to/cache",
 
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
@@ -22,7 +23,7 @@ module.exports = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    "./src/**/*.{js,jsx,ts,tsx}"
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
 
   // The directory where Jest should output its coverage files
@@ -76,7 +77,8 @@ module.exports = {
   // A map from regular expressions to module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
 
-  // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
+  // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the
+  // module loader
   // modulePathIgnorePatterns: [],
 
   // Activates notifications for test results
@@ -145,7 +147,7 @@ module.exports = {
   testPathIgnorePatterns: ["/lib/", "/node_modules/", "/test/utils"],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-  testRegex: "(/test/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  testRegex: ["(/test/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"],
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: null,
@@ -160,16 +162,18 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  "transform": {
-    "^.+\\.tsx?$": "ts-jest"
-  },
+  transform: [
+    ["^.+\\.tsx?$", "ts-jest"],
+  ],
 
-  // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
+  // An array of regexp pattern strings that are matched against all source file paths,
+  // matched files will skip transformation
   // transformIgnorePatterns: [
   //   "\\\\node_modules\\\\"
   // ],
 
-  // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
+  // An array of regexp pattern strings that are matched against all modules before the module loader will
+  // automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
 
   // Indicates whether each individual test should be reported during the run
@@ -181,3 +185,5 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 };
+
+module.exports = config;

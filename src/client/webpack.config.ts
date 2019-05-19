@@ -2,6 +2,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
 import * as webpack from "webpack";
 import { JS_BUNDLE_DIR, templateHtml } from "../shared/build";
+import { babelConfig } from "./babel.config";
 
 export default (
     env: undefined,
@@ -24,9 +25,7 @@ export default (
                 use: [
                     {
                         loader: "babel-loader",
-                        options: {
-                            configFile: resolve(__dirname, "./babel.config.js"),
-                        },
+                        options: babelConfig,
                     },
                     {
                         loader: "ts-loader",
