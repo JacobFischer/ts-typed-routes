@@ -47,6 +47,7 @@ describe("Server", () => [
         const server = await start(port, getDistDir());
         const location = "/";
         const page = await browser.newPage();
+        page.on("error", (err) => fail(err));
         await page.setCacheEnabled(false);
         await page.setJavaScriptEnabled(false); // loadables will start loading and change expected body text
 

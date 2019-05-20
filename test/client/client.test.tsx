@@ -3,7 +3,7 @@ import { stat } from "fs-extra";
 import { Server } from "http";
 import { join } from "path";
 import puppeteer from "puppeteer";
-import { getClientDistDir, isPortTaken, newExpressServer } from "../utils";
+import { closeServer, getClientDistDir, isPortTaken, newExpressServer } from "../utils";
 
 const PORT = 8888;
 let browser = undefined as unknown as puppeteer.Browser;
@@ -13,6 +13,11 @@ beforeAll(async () => Promise.all([
         .then((b) => browser = b),
     newExpressServer(PORT, async (app) => app.use("/", express.static(await getClientDistDir())))
         .then((s) => server = s),
+]));
+
+afterAll(() => Promise.all([
+    browser.close(),
+    closeServer(server),
 ]));
 
 describe("Client", () => {
@@ -28,6 +33,7 @@ describe("Client", () => {
     it("renders on the web page", async () => {
         expect(browser).toBeTruthy();
         const page = await browser.newPage();
+        page.on("error", (err) => fail(err));
 
         const response = await page.goto(`http://localhost:${PORT}/`);
         expect(response).toBeTruthy();
