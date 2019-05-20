@@ -40,8 +40,11 @@ describe("Client", () => {
         if (!response) {
             throw new Error("No response from client static web server!");
         }
-
         expect(response.status()).toBe(200);
+
+        const content = await page.content();
+        expect(typeof content).toBe("string");
+        expect(content.length).toBeGreaterThan(0); // loadable can mutate to page so just test to make sure it exists
 
         await page.close();
     });

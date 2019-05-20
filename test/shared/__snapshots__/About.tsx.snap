@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`About component renders 1`] = `
+Array [
+  <h2>
+    About
+  </h2>,
+  <p>
+    <strong>
+      Jacob Fischer
+    </strong>
+     made this page! It's simple boilerplate to get up and moving ASAP.
+  </p>,
+]
+`;
