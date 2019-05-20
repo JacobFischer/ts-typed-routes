@@ -1,3 +1,3 @@
-# WikidFox
+# Flexi Stack Boilerplate
 
-Simple flat markdown Wiki using Git as a data service
+Flexible stack of boilerplates for rapid web app development.
