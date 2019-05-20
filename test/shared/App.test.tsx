@@ -11,7 +11,7 @@ const renderApp = (location?: string) => renderer
         </StaticRouter>
     )).toJSON();
 
-describe("Component: App", () => {
+describe("App component", () => {
     it("renders", () => {
         expect(renderApp()).toMatchSnapshot();
     });

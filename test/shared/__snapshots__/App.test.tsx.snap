@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Component: App renders 1`] = `
+exports[`App component renders 1`] = `
 Array [
   <ul>
     <li>
@@ -42,7 +42,7 @@ Array [
 ]
 `;
 
-exports[`Component: App renders the About page 1`] = `
+exports[`App component renders the About page 1`] = `
 Array [
   <ul>
     <li>
@@ -90,7 +90,7 @@ Array [
 ]
 `;
 
-exports[`Component: App renders the NotFound page on bad routes 1`] = `
+exports[`App component renders the NotFound page on bad routes 1`] = `
 Array [
   <ul>
     <li>
@@ -135,7 +135,7 @@ Array [
 ]
 `;
 
-exports[`Component: App renders the SomePage page 1`] = `
+exports[`App component renders the SomePage page 1`] = `
 Array [
   <ul>
     <li>
@@ -185,7 +185,7 @@ Array [
 ]
 `;
 
-exports[`Component: App renders the index Home page 1`] = `
+exports[`App component renders the index Home page 1`] = `
 Array [
   <ul>
     <li>
@@ -230,7 +230,7 @@ Array [
 ]
 `;
 
-exports[`Component: App renders with React-Loadable once preloaded 1`] = `
+exports[`App component renders with React-Loadable once preloaded 1`] = `
 Array [
   <ul>
     <li>
