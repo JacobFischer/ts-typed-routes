@@ -8,7 +8,7 @@ import { closeServer, getClientDistDir, isPortTaken, newExpressServer } from "..
 const PORT = 8888;
 let browser = undefined as unknown as puppeteer.Browser;
 let server = undefined as unknown as Server;
-beforeAll(async () => Promise.all([
+beforeAll(() => Promise.all([
     puppeteer.launch()
         .then((b) => browser = b),
     newExpressServer(PORT, async (app) => app.use("/", express.static(await getClientDistDir())))

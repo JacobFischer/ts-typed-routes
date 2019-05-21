@@ -9,16 +9,14 @@ import { templateHtml } from "../../src/shared/build";
 import { App } from "../../src/shared/components/App";
 import { closeServer, getClientDistDir, isPortTaken } from "../utils";
 
-let browser = undefined as any as puppeteer.Browser; // will be set first below
+let browser = undefined as unknown as puppeteer.Browser; // will be set first below
 let clientDistDir = "";
-beforeAll(async () => {
-    browser = await puppeteer.launch();
-    clientDistDir = await getClientDistDir();
-});
+beforeAll(() => Promise.all([
+    puppeteer.launch().then((b) => browser = b),
+    getClientDistDir().then((c) => clientDistDir = c),
+]));
 
-afterAll(async () => {
-    await browser.close();
-});
+afterAll(() => browser.close());
 
 describe("Server", () => [
     ["with only server side rendering", 8080, false] as const,
