@@ -2,7 +2,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
 import * as webpack from "webpack";
 import { JS_BUNDLE_DIR, templateHtml } from "../shared/build";
-import { babelConfig } from "./babel.config";
+
+const babelConfig = require("./babel.config.js") as {}; // wish TS was smart enough to deduce from @type
 
 export default (
     env: undefined,

@@ -23,7 +23,7 @@ for any real software engineering project.
 - Webpack (client bundles)
 - Babel (client transpiling)
 - Jest (testing + coverage)
-- TSlint (linting)
+- ESlint (linting)
 
 ## Other notes
 

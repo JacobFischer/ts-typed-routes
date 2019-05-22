@@ -22,7 +22,7 @@ describe("Server", () => [
     ["with only server side rendering", 8080, false] as const,
     ["with client side rendering", 9090, true] as const,
 ].forEach(([description, port, clientSideRendering]) => describe(description, () => {
-    const getDistDir = () => clientSideRendering
+    const getDistDir = (): string | null => clientSideRendering
         ? clientDistDir // wrap in function due to async before all above
         : null;
 

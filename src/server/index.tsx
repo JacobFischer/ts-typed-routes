@@ -5,12 +5,11 @@ const PORT = 8080;
 
 // tslint:disable:no-console
 
-(async function startServer() {
+(async () => {
     console.log("--- Server Starting ---");
 
-    let server: any;
     try {
-        server = await start(PORT, resolve(__dirname, "../client/"));
+        await start(PORT, resolve(__dirname, "../client/"));
     } catch (err) {
         console.error(`Error starting server:`, err);
         process.exit(1);

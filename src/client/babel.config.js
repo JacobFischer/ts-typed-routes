@@ -1,6 +1,7 @@
-import { TransformOptions } from "@babel/core";
+// @ts-check
 
-export const babelConfig: TransformOptions = {
+/** @type {import("@babel/core").TransformOptions} */
+const babelConfig = {
     plugins: [
         "react-hot-loader/babel",
         "@babel/plugin-proposal-class-properties",
@@ -14,3 +15,5 @@ export const babelConfig: TransformOptions = {
         "@babel/preset-react",
     ],
 };
+
+module.exports = babelConfig;

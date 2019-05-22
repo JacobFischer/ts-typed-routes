@@ -1,8 +1,8 @@
 import React from "react";
 
-export const NotFound = () => (
+export const NotFound = (): JSX.Element => (
     <>
         <h2>Not Found</h2>
-        <pre>Sorry, but we couldn't find anything here!</pre>
+        <pre>Sorry, but we couldn&apos;t find anything here!</pre>
     </>
 );

@@ -8,13 +8,13 @@ export const HTML_START =
         <title>Hello World!</title>
     </head>
     <body>
-        <div id="${ROOT_ELEMENT_ID}">`.replace(/(    )|\n/g, "");
+        <div id="${ROOT_ELEMENT_ID}">`.replace(/ {4}|\n/g, "");
 
 export const HTML_MID = "</div>";
 
 export const HTML_END = "</body></html>";
 
-export const templateHtml = (body: string = "", scripts: string = "") => [
+export const templateHtml = (body: string = "", scripts: string = ""): string => [
     HTML_START,
     body,
     HTML_MID,

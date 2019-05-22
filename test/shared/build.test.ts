@@ -1,5 +1,3 @@
-import { createFile, ensureDir, remove } from "fs-extra";
-import { join } from "path";
 import { HTML_END, HTML_MID, HTML_START, templateHtml } from "../../src/shared/build";
 
 const BODY = "<p>Hello!</p>";

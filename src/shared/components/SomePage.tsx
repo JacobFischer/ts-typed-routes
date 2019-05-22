@@ -1,6 +1,6 @@
 import React from "react";
 
-export const SomePage = () => (
+export const SomePage = (): JSX.Element => (
     <>
         <h3>SomePage</h3>
         <p>This is just some random page.</p>
