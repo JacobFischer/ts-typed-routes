@@ -1,3 +1,4 @@
+/* eslint-env node */
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
 import * as webpack from "webpack";

@@ -1,9 +1,8 @@
 import { resolve } from "path";
 import { start } from "./start";
+/* eslint-disable no-console */
 
 const PORT = 8080;
-
-// tslint:disable:no-console
 
 (async () => {
     console.log("--- Server Starting ---");
@@ -11,7 +10,7 @@ const PORT = 8080;
     try {
         await start(PORT, resolve(__dirname, "../client/"));
     } catch (err) {
-        console.error(`Error starting server:`, err);
+        console.error("Error starting server:", err);
         process.exit(1);
     }
 

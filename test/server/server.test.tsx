@@ -21,6 +21,7 @@ afterAll(() => browser.close());
 describe("Server", () => [
     ["with only server side rendering", 8080, false] as const,
     ["with client side rendering", 9090, true] as const,
+    // eslint-disable-next-line jest/valid-describe
 ].forEach(([description, port, clientSideRendering]) => describe(description, () => {
     const getDistDir = (): string | null => clientSideRendering
         ? clientDistDir // wrap in function due to async before all above
@@ -41,11 +42,11 @@ describe("Server", () => [
         expect(server.listening).toBe(false);
     });
 
-    it("serves the page", async () => {
+    it("serves the page", async (done) => {
         const server = await start(port, getDistDir());
         const location = "/";
         const page = await browser.newPage();
-        page.on("error", (err) => fail(err));
+        page.on("error", (err) => done.fail(err));
         await page.setCacheEnabled(false);
         await page.setJavaScriptEnabled(false); // loadables will start loading and change expected body text
 
@@ -89,5 +90,6 @@ describe("Server", () => [
 
         await page.close();
         await closeServer(server);
+        done();
     }, 12500); // these are long with puppeteer working
 })));

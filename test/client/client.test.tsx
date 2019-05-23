@@ -30,10 +30,10 @@ describe("Client", () => {
         expect(await isPortTaken(PORT)).toBe(true);
     });
 
-    it("renders on the web page", async () => {
+    it("renders on the web page", async (done) => {
         expect(browser).toBeTruthy();
         const page = await browser.newPage();
-        page.on("error", (err) => fail(err));
+        page.on("error", (err) => done.fail(err));
 
         const response = await page.goto(`http://localhost:${PORT}/`);
         expect(response).toBeTruthy();
@@ -47,5 +47,6 @@ describe("Client", () => {
         expect(content.length).toBeGreaterThan(0); // loadable can mutate to page so just test to make sure it exists
 
         await page.close();
+        done();
     });
 });

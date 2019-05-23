@@ -1,13 +1,13 @@
 // @ts-check
+/* eslint-env node */
 
 const { resolve } = require("path");
 
 /** @type {import("eslint").Linter.Config & { plugins?: string[]; extends?: string[] }} */
-const config = {
+const baseEslintConfig = {
     env: {
-        browser: true,
         es6: true,
-        node: true
+        "shared-node-browser": true,
     },
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -26,6 +26,7 @@ const config = {
         "react",
     ],
     extends: [
+        "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
     ],
@@ -47,4 +48,4 @@ const config = {
     },
 };
 
-module.exports = config;
+module.exports = baseEslintConfig;

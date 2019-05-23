@@ -30,6 +30,6 @@ for any real software engineering project.
 The tests have 100% code coverage. That's incredibly hard to maintain in the
 real world, but it does not start you ham stringed.
 
-ALso linter rules are based off TSLint's reccomended settings, however for any
+ALso linter rules are based off ESLint's reccomended settings, however for any
 rules not clearly defined I use my opinion on good code, and basically every
 other developer will have differing opinions.

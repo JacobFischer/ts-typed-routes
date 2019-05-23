@@ -1,4 +1,5 @@
-// @ts-check
+/* @ts-check */
+/* eslint-env node */
 
 /** @type {import("@babel/core").TransformOptions} */
 const babelConfig = {

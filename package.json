@@ -24,6 +24,7 @@
     "@types/fs-extra": "5.1.0",
     "@types/html-webpack-plugin": "3.2.0",
     "@types/jest": "24.0.13",
+    "@types/lodash": "^4.14.130",
     "@types/node": "12.0.0",
     "@types/puppeteer": "1.12.4",
     "@types/react": "16.8.17",
@@ -39,6 +40,7 @@
     "eslint": "5.16.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-plugin-import": "2.17.2",
+    "eslint-plugin-jest": "^22.5.1",
     "eslint-plugin-jsx-a11y": "6.2.1",
     "eslint-plugin-react": "^7.13.0",
     "express": "4.16.4",
@@ -47,6 +49,7 @@
     "http-server": "0.11.1",
     "jest": "24.8.0",
     "jest-cli": "24.8.0",
+    "lodash": "4.17.11",
     "puppeteer": "1.16.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
@@ -77,10 +80,7 @@
     "rebuild": "npm run clean && npm run build",
     "clean": "shx rm -rf .cache/ dist/",
     "purge": "shx rm -rf node_modules/ && rm -rf package-lock.json",
-    "lint": "eslint ./ --ext .ts,tsx",
-    "lint:old": "npm run lint:client && npm run lint:server",
-    "lint:client": "tslint --project src/client/tsconfig.json --config tslint.json",
-    "lint:server": "tslint --project src/server/tsconfig.json --config tslint.json",
+    "lint": "eslint ./ --ext .js,.ts,tsx --ignore-pattern dist/",
     "test": "jest --env=node --config ./test/jest.config.js --colors --coverage test"
   }
 }
