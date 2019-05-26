@@ -1,8 +1,9 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "target": "esnext", // babel transpiles down to older versions
         "lib": ["esnext", "dom"],
-        "jsx": "preserve", // again babel will do this
+        "target": "esnext", // babel transpiles down to older versions
+        "module": "esnext", // ^
+        "jsx": "preserve",  // ^
     }
 }
