@@ -33,6 +33,7 @@
     "@types/react-router-dom": "4.3.3",
     "@types/react-test-renderer": "16.8.1",
     "@types/webpack": "4.4.31",
+    "@types/webpack-node-externals": "1.6.3",
     "@typescript-eslint/eslint-plugin": "1.9.0",
     "@typescript-eslint/parser": "1.9.0",
     "babel-loader": "^8.0.6",
@@ -64,15 +65,16 @@
     "typescript": "3.4.5",
     "webpack": "4.28.4",
     "webpack-cli": "3.3.2",
-    "webpack-dev-server": "3.3.1"
+    "webpack-dev-server": "3.3.1",
+    "webpack-node-externals": "1.7.2"
   },
   "scripts": {
     "start": "npm run start:server",
     "start:client": "http-server ./dist/client",
-    "start:server": "node ./dist/server",
+    "start:server": "node ./dist/server/main.js",
     "dev": "webpack-dev-server --hot --mode development",
     "build": "npm run build:client && npm run build:server",
-    "build:server": "tsc -p src/server/tsconfig.json",
+    "build:server": "webpack --progress --colors --config src/server/webpack.config.ts --mode development",
     "build:client": "npm run build:client:dev",
     "build:client:dev": "npm run build:client:webpack -- --config src/client/webpack.config.ts --mode development",
     "build:client:prod": "npm run build:client:webpack -- --config src/client/webpack.config.ts --mode production",
