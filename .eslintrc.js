@@ -36,10 +36,7 @@ const baseEslintConfig = {
         "react/display-name": "off", // Babel plugin now injects display name
 
         // TypeScript
-        "@typescript-eslint/explicit-function-return-type": ["warn", {
-            allowExpressions: true,
-            allowTypedFunctionExpressions: true,
-        }],
+        "@typescript-eslint/explicit-function-return-type": "off", // For now does not allow enough control over arrow functions, always requiring return types even on simple reducers and such.
     },
     settings: {
         react: {
