@@ -24,6 +24,8 @@ for any real software engineering project.
 - Babel (client transpiling)
 - Jest (testing + coverage)
 - ESlint (linting)
+- styled-components for CSS styling
+- express and react-dom for streaming server side rendering
 
 ## Other notes
 

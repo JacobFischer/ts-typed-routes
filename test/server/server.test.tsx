@@ -5,7 +5,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { getScriptsFromIndexHtml } from "../../src/server/build";
 import { start } from "../../src/server/start";
-import { templateHtml } from "../../src/shared/build";
+import { serverSideRender } from "../../src/server/server-side-render";
 import { App } from "../../src/shared/components/App";
 import { closeServer, getClientDistDir, isPortTaken } from "../utils";
 
@@ -58,19 +58,13 @@ describe("Server", () => [
             throw new Error("No response!");
         }
 
-        const expectedBody = templateHtml(
-            renderToString(
-                <StaticRouter location={location}>
-                    <App />
-                </StaticRouter>,
-            ),
-            clientSideRendering
-                ? await getScriptsFromIndexHtml(getDistDir() || "")
-                : "",
+        const expectedHtml = serverSideRender(location, clientSideRendering
+            ? await getScriptsFromIndexHtml(getDistDir() || "")
+            : "",
         );
 
-        const body = await page.content();
-        expect(body).toEqual(expectedBody);
+        const html = await page.content();
+        expect(html).toEqual(expectedHtml);
 
         // now test with js to make sure it just renders
         await page.setJavaScriptEnabled(true);
@@ -84,7 +78,7 @@ describe("Server", () => [
 
         if (!clientSideRendering) {
             // server side render should not change when the client renders it
-            expect(jsBody).toEqual(body);
+            expect(jsBody).toEqual(html);
         }
         // else client side rendering took over, and loadables may have already mutated the page
 

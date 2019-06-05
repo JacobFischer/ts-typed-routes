@@ -1,45 +1,53 @@
-import cors from "cors";
+// import cors from "cors";
 import express from "express";
 import { Server } from "http";
 import { join } from "path";
 import * as React from "react";
-import * as ReactDOMServer from "react-dom/server";
-import { preloadAll } from "react-loadable";
+import { renderToNodeStream } from "react-dom/server";
+// import { preloadAll } from "react-loadable";
 import { StaticRouter } from "react-router";
-import { HTML_END, HTML_MID, HTML_START, JS_BUNDLE_DIR } from "../shared/build";
+import { ServerStyleSheet } from 'styled-components'
+import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
 import { App } from "../shared/components/App";
-import { getScriptsFromIndexHtml } from "./build";
+import { readFile } from "fs-extra";
 
 export async function start(port: number, clientSideBundleDir: null | string): Promise<Server> {
     const app = express();
-    app.use(cors());
-    app.disable("x-powered-by"); // Redundant, no need to report on every response
 
-    const scripts = clientSideBundleDir && await getScriptsFromIndexHtml(clientSideBundleDir) || "";
+    let scripts = "";
     if (clientSideBundleDir) {
-        app.use(`/${JS_BUNDLE_DIR}`, express.static(join(clientSideBundleDir, JS_BUNDLE_DIR)));
+        app.use(`/static`, express.static(join(clientSideBundleDir, STATIC_BUNDLE_DIR)));
+
+        const indexHtml = await readFile(join(clientSideBundleDir, "index.html"));
+        const scriptsArray = indexHtml.toString().match(/<script(.*?)<\/script>/g);
+
+        if (!scriptsArray) {
+            throw new Error("no scripts!");
+        }
+
+        scripts = scriptsArray.join("");
     }
 
-    // preload all react-loadable components
-    await preloadAll();
+    const htmlStart = `<html><head><title>Server Side Render</title>${scripts}</head><body>`;
 
     app.get("*", async (req, res) => {
-        res.write(HTML_START);
+        res.write(htmlStart);
 
+        const sheet = new ServerStyleSheet();
         const context = {};
-        const componentStream = ReactDOMServer.renderToNodeStream(
-            <StaticRouter location={req.url} context={context}>
-                <App />
-            </StaticRouter>,
+        const jsx = sheet.collectStyles((
+            <div id={ROOT_ELEMENT_ID}>
+                <StaticRouter location={req.url} context={context}>
+                    <App />
+                </StaticRouter>
+            </div>),
         );
-        componentStream.pipe(res, { end: false });
-        await new Promise((resolve) => componentStream.once("end", resolve));
-        res.write(HTML_MID);
-        if (scripts) {
-            res.write(scripts);
-        }
-        res.write(HTML_END);
-        res.end();
+
+        const bodyStream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx));
+        bodyStream.pipe(res, { end: false });
+        await new Promise((resolve) => bodyStream.once("end", resolve));
+
+        res.end("</body></html>");
     });
 
     return new Promise((resolve) => {

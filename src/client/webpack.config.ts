@@ -2,7 +2,7 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
 import * as webpack from "webpack";
-import { JS_BUNDLE_DIR, templateHtml } from "../shared/build";
+import { htmlTemplatePreBody, htmlTemplatePostBody, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
 
 const babelConfig = require("./babel.config.js") as {}; // wish TS was smart enough to deduce from @type
 
@@ -44,12 +44,12 @@ export default (
         usedExports: true,
     },
     output: {
-        filename: join(JS_BUNDLE_DIR, "[name].js"),
+        filename: join(STATIC_BUNDLE_DIR, "[name].js"),
         path: resolve(__dirname, "../../dist/client"),
     },
     plugins: [
         new HtmlWebpackPlugin({
-            templateContent: templateHtml(),
+            templateContent: `${htmlTemplatePreBody()}<div id="${ROOT_ELEMENT_ID}"></div>${htmlTemplatePostBody()}`,
         }),
     ],
     resolve: {

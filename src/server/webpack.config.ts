@@ -3,6 +3,8 @@ import { resolve } from "path";
 import * as webpack from "webpack";
 import nodeExternals from "webpack-node-externals";
 
+const babelConfig = require("./babel.config.js") as {}; // wish TS was smart enough to deduce from @type
+
 export default (
     env: undefined,
     options: webpack.Configuration,
@@ -20,6 +22,10 @@ export default (
                 exclude: /node_modules/,
                 test: /\.tsx?$/,
                 use: [
+                    {
+                        loader: "babel-loader",
+                        options: babelConfig,
+                    },
                     {
                         loader: "ts-loader",
                     },
