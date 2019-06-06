@@ -7,11 +7,11 @@ import { renderToNodeStream } from "react-dom/server";
 // import { preloadAll } from "react-loadable";
 import { StaticRouter } from "react-router";
 import { ServerStyleSheet } from 'styled-components'
-import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
+import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
 import { readFile } from "fs-extra";
 
-export async function start(port: number, clientSideBundleDir: null | string): Promise<Server> {
+export async function start(port: number, clientSideBundleDir = "") {
     const app = express();
 
     let scripts = "";
@@ -28,7 +28,12 @@ export async function start(port: number, clientSideBundleDir: null | string): P
         scripts = scriptsArray.join("");
     }
 
-    const htmlStart = `<html><head><title>Server Side Render</title>${scripts}</head><body>`;
+    const htmlStart = [
+        indexHtmlTemplate.preHead,
+        "<title>Server Side Render</title>",
+        scripts,
+        indexHtmlTemplate.postHeadPreBody,
+    ].join("");
 
     app.get("*", async (req, res) => {
         res.write(htmlStart);
@@ -47,10 +52,10 @@ export async function start(port: number, clientSideBundleDir: null | string): P
         bodyStream.pipe(res, { end: false });
         await new Promise((resolve) => bodyStream.once("end", resolve));
 
-        res.end("</body></html>");
+        res.end(indexHtmlTemplate.postBody);
     });
 
-    return new Promise((resolve) => {
+    return new Promise<Server>((resolve) => {
         const server = app.listen(port, () => resolve(server));
     });
 }

@@ -1,7 +1,7 @@
 /* eslint-env node */
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
-import { htmlTemplatePreBody, htmlTemplatePostBody, createWebpackConfiguration, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
+import { createWebpackConfiguration, indexHtmlTemplate, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
 import babelConfig from "./babel.config.js";
 
 export default createWebpackConfiguration(babelConfig, {
@@ -17,7 +17,13 @@ export default createWebpackConfiguration(babelConfig, {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            templateContent: `${htmlTemplatePreBody()}<div id="${ROOT_ELEMENT_ID}"></div>${htmlTemplatePostBody()}`,
+            templateContent: [
+                indexHtmlTemplate.preHead,
+                "<title>Client side render</div>",
+                indexHtmlTemplate.postHeadPreBody,
+                `<div id="${ROOT_ELEMENT_ID}"></div>`,
+                indexHtmlTemplate.postBody,
+            ].join(""),
         }),
     ],
 });
