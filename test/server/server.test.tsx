@@ -3,9 +3,7 @@ import puppeteer from "puppeteer";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
-import { getScriptsFromIndexHtml } from "../../src/server/build";
 import { start } from "../../src/server/start";
-import { serverSideRender } from "../../src/server/server-side-render";
 import { App } from "../../src/shared/components/App";
 import { closeServer, getClientDistDir, isPortTaken } from "../utils";
 
@@ -23,9 +21,9 @@ describe("Server", () => [
     ["with client side rendering", 9090, true] as const,
     // eslint-disable-next-line jest/valid-describe
 ].forEach(([description, port, clientSideRendering]) => describe(description, () => {
-    const getDistDir = (): string | null => clientSideRendering
+    const getDistDir = () => clientSideRendering
         ? clientDistDir // wrap in function due to async before all above
-        : null;
+        : "";
 
     it("has a port to bind to", async () => {
         expect(port).toBeGreaterThan(0);
@@ -58,27 +56,33 @@ describe("Server", () => [
             throw new Error("No response!");
         }
 
-        const expectedHtml = serverSideRender(location, clientSideRendering
-            ? await getScriptsFromIndexHtml(getDistDir() || "")
-            : "",
+        const expectedHtml = renderToString(
+            <StaticRouter location={location}>
+                <App />
+            </StaticRouter>
         );
 
-        const html = await page.content();
-        expect(html).toEqual(expectedHtml);
+        const pageHtml = await page.content();
+        expect(pageHtml).toContain(expectedHtml);
+
+        if (clientSideRendering) {
+            // we'd expect some scripts for client side rendering to be in the html
+            expect(pageHtml).toContain("<script");
+        }
 
         // now test with js to make sure it just renders
         await page.setJavaScriptEnabled(true);
         await page.reload();
         await page.waitFor(1000);
-        const jsBody = await page.content();
-        expect(typeof jsBody).toBe("string");
+        const pageHtmlJsRendered = await page.content();
+        expect(typeof pageHtmlJsRendered).toBe("string");
         // it should be some string,
         // we can't know for certain how because of how loadables will or will not mutate it however,
-        expect(jsBody.length).toBeGreaterThan(0);
+        expect(pageHtmlJsRendered.length).toBeGreaterThan(0);
 
         if (!clientSideRendering) {
             // server side render should not change when the client renders it
-            expect(jsBody).toEqual(html);
+            expect(pageHtmlJsRendered).toEqual(pageHtml);
         }
         // else client side rendering took over, and loadables may have already mutated the page
 

@@ -4,7 +4,7 @@ import { Server } from "http";
 import { join } from "path";
 import * as React from "react";
 import { renderToNodeStream } from "react-dom/server";
-// import { preloadAll } from "react-loadable";
+import { preloadAll } from "react-loadable";
 import { StaticRouter } from "react-router";
 import { ServerStyleSheet } from 'styled-components'
 import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
@@ -12,6 +12,8 @@ import { App } from "../shared/components/App";
 import { readFile } from "fs-extra";
 
 export async function start(port: number, clientSideBundleDir = "") {
+    await preloadAll(); // don't even start express till react-loadable is preloaded
+
     const app = express();
 
     let scripts = "";
