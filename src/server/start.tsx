@@ -6,10 +6,11 @@ import React from "react";
 import { renderToNodeStream } from "react-dom/server";
 import { preloadAll, Capture } from "react-loadable";
 import { getBundles, Manifest } from 'react-loadable/webpack'
-import { StaticRouter } from "react-router";
+import { StaticRouter, StaticRouterContext } from "react-router";
 import { ServerStyleSheet } from 'styled-components'
 import { DIST_PATH_CLIENT, DIST_PATH_REACT_LOADABLES_MANIFEST, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
+import { routeExists } from "../shared/routes";
 import urlJoin from "url-join";
 import { readFile } from "fs-extra";
 
@@ -42,15 +43,22 @@ export async function start(port: number, clientSideRendering: boolean) {
     }
 
     app.get("*", async (req, res) => {
+        if (!routeExists(req.url)) {
+            res.status(404);
+        }
+
         res.write(indexHtmlTemplate.top);
 
         const sheet = new ServerStyleSheet();
         const loadedModules = new Array<string>();
-        const context = {};
+        // normally we'd use a StaticRouter context to capture if the rendered route was a 404 not found;
+        // however we are streaming this response. So the HTTP Status Code has already been sent,
+        // thus we don't care at this point in time.
+        const staticRouterContext: StaticRouterContext = {};
 
         let jsx = sheet.collectStyles((
             <div id={ROOT_ELEMENT_ID}>
-                <StaticRouter location={req.url} context={context}>
+                <StaticRouter location={req.url} context={staticRouterContext}>
                     <App />
                 </StaticRouter>
             </div>),
