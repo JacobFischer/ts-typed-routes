@@ -2,14 +2,14 @@
 const unIndent = (str: string) => str.replace(/ {4}|\n|\t/g, "");
 
 export const indexHtmlTemplate = Object.freeze({
-    preHead: unIndent(`
+    top: unIndent(`
 <!DOCTYPE html>
 <html>
-    <head>`),
-    postHeadPreBody: unIndent(`
+    <head>
+        <title>Flexi-Stack</title>
     </head>
     <body>`),
-    postBody: unIndent(`
+    bottom: unIndent(`
     </body>
 </html>
 `),

@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { start } from "./start";
 /* eslint-disable no-console */
 
@@ -8,7 +7,7 @@ const PORT = 8080;
     console.log("--- Server Starting ---");
 
     try {
-        await start(PORT, resolve(__dirname, "../client/"));
+        await start(PORT, true);
     } catch (err) {
         console.error("Error starting server:", err);
         process.exit(1);

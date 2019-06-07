@@ -1,8 +1,11 @@
 /* eslint-env node */
 import { resolve } from "path";
+import { ReactLoadablePlugin } from "react-loadable/webpack";
 import nodeExternals from "webpack-node-externals";
-import { createWebpackConfiguration } from "../shared/build";
+import { createWebpackConfiguration, DIST_PATH_SERVER, DIST_PATH_REACT_LOADABLES_MANIFEST } from "../shared/build";
 import babelConfig from "./babel.config.js";
+
+const distRoot = (...paths: string[]) => resolve(__dirname, "../../", ...paths);
 
 export default createWebpackConfiguration(babelConfig, {
     entry: [
@@ -23,7 +26,12 @@ export default createWebpackConfiguration(babelConfig, {
     },
     output: {
         filename: "[name].js",
-        path: resolve(__dirname, "../../dist/server"),
+        path: distRoot(DIST_PATH_SERVER),
     },
+    plugins: [
+        new ReactLoadablePlugin({
+            filename: distRoot(DIST_PATH_REACT_LOADABLES_MANIFEST),
+        }),
+    ],
     target: "node",
 });

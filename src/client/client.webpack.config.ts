@@ -18,11 +18,9 @@ export default createWebpackConfiguration(babelConfig, {
     plugins: [
         new HtmlWebpackPlugin({
             templateContent: [
-                indexHtmlTemplate.preHead,
-                "<title>Client side render</div>",
-                indexHtmlTemplate.postHeadPreBody,
+                indexHtmlTemplate.top,
                 `<div id="${ROOT_ELEMENT_ID}"></div>`,
-                indexHtmlTemplate.postBody,
+                indexHtmlTemplate.bottom,
             ].join(""),
         }),
     ],

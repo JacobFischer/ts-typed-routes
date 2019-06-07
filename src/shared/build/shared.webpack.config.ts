@@ -8,7 +8,7 @@ export const createWebpackConfiguration = (
     ...configs: Configuration[]
 ) => (env: undefined, argv: Configuration): Configuration => webpackMerge({
     devtool: argv.mode === "development"
-        ? "source-map"
+        ? "inline-source-map"
         : false,
     module: {
         rules: [

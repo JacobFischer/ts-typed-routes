@@ -4,6 +4,7 @@
 /** @type {import("@babel/core").TransformOptions} */
 const sharedBabelConfig = {
     plugins: [
+        "react-loadable/babel",
         "@babel/plugin-syntax-dynamic-import",
         ["babel-plugin-styled-components", {
             ssr: true,
