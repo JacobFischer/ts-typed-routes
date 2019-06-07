@@ -2,7 +2,7 @@
 import express from "express";
 import { Server } from "http";
 import { resolve } from "path";
-import * as React from "react";
+import React from "react";
 import { renderToNodeStream } from "react-dom/server";
 import { preloadAll, Capture } from "react-loadable";
 import { getBundles, Manifest } from 'react-loadable/webpack'
@@ -11,7 +11,7 @@ import { ServerStyleSheet } from 'styled-components'
 import { DIST_PATH_CLIENT, DIST_PATH_REACT_LOADABLES_MANIFEST, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
 import urlJoin from "url-join";
-import { readFile, stat } from "fs-extra";
+import { readFile } from "fs-extra";
 
 const rootDir = (...paths: string[]) => resolve(__dirname, "../../", ...paths);
 
