@@ -1,4 +1,3 @@
-/* eslint-env node */
 import { join } from "path";
 
 export const STATIC_BUNDLE_DIR = "static/";
