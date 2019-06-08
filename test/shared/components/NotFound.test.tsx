@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import { NotFound } from "../../src/shared/components/NotFound";
+import { NotFound } from "../../../src/shared/components/NotFound";
 
 describe("NotFound component", () => {
     it("renders", () => {

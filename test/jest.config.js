@@ -36,10 +36,11 @@ const jestConfig = {
 
     // An array of regexp pattern strings used to skip coverage collection
     coveragePathIgnorePatterns: [
-        "\\\\node_modules\\\\",
-        "(babel|webpack|jest).config.(js|ts)",
-        ".eslintrc.js",
-        "src/(client|server)/index.(tsx?)",
+        "\\\\node_modules\\\\", // do not test external modules
+        "(babel|webpack|jest).config.(js|ts)", // config files for frameworks/tools
+        ".eslintrc.js", // config file for eslint
+        "src/(client|server)/index.(tsx?)", // launchers for client/server. In truth they are tested, but these files are really an entry for webpack
+        "build/*", // build constants and scripts, tested via a build completing,
     ],
 
     // A list of reporter names that Jest uses when writing coverage reports

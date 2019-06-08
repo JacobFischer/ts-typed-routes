@@ -24,17 +24,13 @@ export async function start(port: number, clientSideRendering: boolean) {
     let manifest: Manifest = {};
     let mainScripts = "";
     if (clientSideRendering) {
-        try {
-            const manifestFile = await readFile(rootDir(DIST_PATH_REACT_LOADABLES_MANIFEST));
-            manifest = JSON.parse(manifestFile.toString());
-        }
-        catch (err) {
-            throw new Error(`Cannot read react-loadables manifest: ${err}`);
-        }
+        const manifestFile = await readFile(rootDir(DIST_PATH_REACT_LOADABLES_MANIFEST));
+        manifest = JSON.parse(manifestFile.toString());
 
         const indexHtml = await readFile(rootDir(DIST_PATH_CLIENT, "index.html"));
         const indexHtmlScripts = indexHtml.toString().match(/<script(.*?)<\/script>/g);
 
+        /* istanbul ignore else: we never expect this to happen, check is to appease TypeScript */
         if (indexHtmlScripts) {
             mainScripts = indexHtmlScripts.join("");
         }
@@ -64,6 +60,7 @@ export async function start(port: number, clientSideRendering: boolean) {
             </div>),
         );
 
+        /* istanbul ignore if: chunks do not exist during tests, so no modules are loaded */
         if (clientSideRendering) {
             jsx = (
                 <Capture report={(moduleName) => loadedModules.push(moduleName)}>
@@ -76,6 +73,7 @@ export async function start(port: number, clientSideRendering: boolean) {
         bodyStream.pipe(res, { end: false });
         await new Promise((resolve) => bodyStream.once("end", resolve));
 
+        /* istanbul ignore if: once again, chunks are never found during tests */
         if (clientSideRendering) {
             res.write(getBundles(manifest, loadedModules)
                 .map((bundle) => `<script src="${urlJoin("/", STATIC_BUNDLE_DIR, bundle.file)}"></script>`)

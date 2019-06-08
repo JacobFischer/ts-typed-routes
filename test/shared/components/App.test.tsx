@@ -2,7 +2,7 @@ import React from "react";
 import Loadable from "react-loadable";
 import { StaticRouter } from "react-router";
 import renderer from "react-test-renderer";
-import { App } from "../../src/shared/components/App";
+import { App } from "../../../src/shared/components/App";
 
 const renderApp = (location?: string): renderer.ReactTestRendererJSON | null => renderer
     .create((

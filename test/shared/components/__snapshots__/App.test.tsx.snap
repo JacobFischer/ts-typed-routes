@@ -2,13 +2,15 @@
 
 exports[`App component renders 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -16,7 +18,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -24,7 +26,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -37,20 +39,22 @@ Array [
     </li>
   </ul>,
   <em>
-    Loading...
+    Loading
   </em>,
 ]
 `;
 
 exports[`App component renders the About page 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -58,7 +62,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -66,7 +70,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -92,13 +96,15 @@ Array [
 
 exports[`App component renders the NotFound page on bad routes 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -106,7 +112,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -114,7 +120,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -137,13 +143,15 @@ Array [
 
 exports[`App component renders the SomePage page 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -151,7 +159,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -159,7 +167,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -187,13 +195,15 @@ Array [
 
 exports[`App component renders the index Home page 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -201,7 +211,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -209,7 +219,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -221,24 +231,30 @@ Array [
       </a>
     </li>
   </ul>,
-  <h1>
-    Home
-  </h1>,
-  <p>
-    Welcome to the index page!
-  </p>,
+  <div
+    className="sc-bwzfXH kOKFyw"
+  >
+    <h1>
+      Home
+    </h1>
+    <p>
+      Welcome to the index page!
+    </p>
+  </div>,
 ]
 `;
 
 exports[`App component renders with React-Loadable once preloaded 1`] = `
 Array [
-  <ul>
+  <ul
+    className="sc-bdVaJa gyiZyl"
+  >
     <li>
       <a
         href="/"
         onClick={[Function]}
       >
-        Home
+        /
       </a>
     </li>
     <li>
@@ -246,7 +262,7 @@ Array [
         href="/about"
         onClick={[Function]}
       >
-        About
+        /about
       </a>
     </li>
     <li>
@@ -254,7 +270,7 @@ Array [
         href="/some-page"
         onClick={[Function]}
       >
-        Some Page
+        /some-page
       </a>
     </li>
     <li>
@@ -266,11 +282,15 @@ Array [
       </a>
     </li>
   </ul>,
-  <h1>
-    Home
-  </h1>,
-  <p>
-    Welcome to the index page!
-  </p>,
+  <div
+    className="sc-bwzfXH kOKFyw"
+  >
+    <h1>
+      Home
+    </h1>
+    <p>
+      Welcome to the index page!
+    </p>
+  </div>,
 ]
 `;

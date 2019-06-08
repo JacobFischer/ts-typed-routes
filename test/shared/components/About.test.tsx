@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import { About } from "../../src/shared/components/About";
+import { About } from "../../../src/shared/components/About";
 
 describe("About component", () => {
     it("renders", () => {

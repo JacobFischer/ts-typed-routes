@@ -1,12 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Home component renders 1`] = `
-Array [
+<div
+  className="sc-bdVaJa oeApa"
+>
   <h1>
     Home
-  </h1>,
+  </h1>
   <p>
     Welcome to the index page!
-  </p>,
-]
+  </p>
+</div>
 `;

@@ -23,12 +23,4 @@ export const routesObject = {
 
 export const routeExists = (path: string) => Object.prototype.hasOwnProperty.call(routesObject, path);
 
-export const routes = Object.entries(routesObject).sort(([a], [b]) => {
-    if (a > b) {
-        return 1;
-    }
-    else if (a < b) {
-        return -1;
-    }
-    return 0;
-});
+export const routes = Object.entries(routesObject).sort(([a], [b]) => a.localeCompare(b));
