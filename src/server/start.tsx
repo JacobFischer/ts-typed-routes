@@ -11,6 +11,7 @@ import { ServerStyleSheet } from 'styled-components'
 import { DIST_PATH_CLIENT, DIST_PATH_REACT_LOADABLES_MANIFEST, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
 import { routeExists } from "../shared/routes";
+import { streamEnd } from "../shared/utils/streams";
 import urlJoin from "url-join";
 import { readFile } from "fs-extra";
 
@@ -71,7 +72,7 @@ export async function start(port: number, clientSideRendering: boolean) {
 
         const bodyStream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx));
         bodyStream.pipe(res, { end: false });
-        await new Promise((resolve) => bodyStream.once("end", resolve));
+        await streamEnd(bodyStream);
 
         /* istanbul ignore if: once again, chunks are never found during tests */
         if (clientSideRendering) {
