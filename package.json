@@ -84,6 +84,7 @@
     "start:static": "http-server ./dist/static",
     "dev": "webpack-dev-server --hot --mode development",
     "build": "npm run build:client && npm run build:server",
+    "build:all": "npm run build:client && npm run build:server && npm run build:static",
     "build:clean": "npm run clean && npm run build",
     "build:webpack": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' webpack --progress --colors",
     "build:server": "npm run build:webpack -- --config src/server/server.webpack.config.ts --mode development",
