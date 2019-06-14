@@ -1,11 +1,9 @@
 import { Server } from "http";
 import puppeteer from "puppeteer";
-import React from "react";
-import { renderToString } from "react-dom/server";
 import { preloadAll } from "react-loadable";
-import { StaticRouter } from "react-router";
+import { Writable } from "stream";
+import { render } from "../../src/server/render";
 import { start } from "../../src/server/start";
-import { App } from "../../src/shared/components/App";
 import { routeExists } from "../../src/shared/routes";
 import { closeServer, isPortTaken } from "../utils";
 
@@ -39,8 +37,14 @@ describe("Server", () => [
         expect(server).toBeInstanceOf(Server);
         expect(server.listening).toBe(true);
 
+        const portTakenConnected = await isPortTaken(port);
+        expect(portTakenConnected).toBe(true);
+
         await closeServer(server);
         expect(server.listening).toBe(false);
+
+        const portTakenDisconnected = await isPortTaken(port);
+        expect(portTakenDisconnected).toBe(false);
     });
 
     it("serves the page", async (done) => {
@@ -49,7 +53,7 @@ describe("Server", () => [
         const page = await browser.newPage();
         page.on("error", (err) => done.fail(err));
         await page.setCacheEnabled(false);
-        await page.setJavaScriptEnabled(false); // loadables will start loading and change expected body text
+        await page.setJavaScriptEnabled(false);
 
         const response = await page.goto(`http://localhost:${port}${location}`);
         expect(response).toBeTruthy();
@@ -59,35 +63,25 @@ describe("Server", () => [
             throw new Error("No response!");
         }
 
-        const expectedHtml = renderToString(
-            <StaticRouter location={location}>
-                <App />
-            </StaticRouter>
-        );
+        const chunks = new Array<string>();
+        const stream = new Writable({ write: (chunk, _, next) => {
+            chunks.push(String(chunk));
+            next();
+        }});
+        await render(stream, location);
+        const expectedHtml = chunks.join("").replace("</div></body></html>", ""); // chop off the end, because scripts may exist
 
         const pageHtml = await page.content();
         expect(pageHtml).toContain(expectedHtml);
 
-        if (enableClientSideRendering) {
-            // we'd expect some scripts for client side rendering to be in the html
-            expect(pageHtml).toContain("<script");
-        }
+        // expect at least 1 script tag with client side rendering, otherwise none
+        expect(pageHtml.includes("<script")).toBe(enableClientSideRendering);
 
         // now test with js to make sure it just renders
         await page.setJavaScriptEnabled(true);
         await page.reload();
         await page.waitFor(1000);
-        const pageHtmlJsRendered = await page.content();
-        expect(typeof pageHtmlJsRendered).toBe("string");
-        // it should be some string,
-        // we can't know for certain how because of how loadables will or will not mutate it however,
-        expect(pageHtmlJsRendered.length).toBeGreaterThan(0);
-
-        if (!enableClientSideRendering) {
-            // server side render should not change when the client renders it
-            expect(pageHtmlJsRendered).toEqual(pageHtml);
-        }
-        // else client side rendering took over, and loadables may have already mutated the page
+        // if an error was thrown with js enabled the on error callback at the start will fail this test
 
         await page.close();
         await closeServer(server);
@@ -95,14 +89,14 @@ describe("Server", () => [
     }, LONG_TIMEOUT); // these are long with puppeteer working
 
     it("serves 404 errors on not found routes", async (done) => {
-        const route = "/i-should-not/work";
-        expect(routeExists(route)).toBe(false);
+        const route404 = "/i-should-not/work";
+        expect(routeExists(route404)).toBe(false);
 
         const server = await start(port, enableClientSideRendering);
         const page = await browser.newPage();
         page.on("error", (err) => done.fail(err));
 
-        const response = await page.goto(`http://localhost:${port}${route}`);
+        const response = await page.goto(`http://localhost:${port}${route404}`);
         expect(response).toBeTruthy();
         if (response) {
             expect(response.status()).toStrictEqual(404);

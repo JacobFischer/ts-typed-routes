@@ -1,5 +1,5 @@
 import { readFile, stat } from "fs-extra";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import * as build from "../../src/shared/build";
 
 const rootDir = (...paths: string[]) => resolve(__dirname, "../../", ...paths);
