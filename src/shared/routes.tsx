@@ -3,7 +3,7 @@ import React from "react";
 import { About } from "./components/About";
 import { SomePage } from "./components/SomePage";
 
-const delay = async (time: number) => new Promise<void>((resolve) => setTimeout(resolve, time));
+const delay = async (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 const Loading = () => <em>Loading</em>;
 
 const LoadableHome = reactLoadable({
@@ -12,7 +12,7 @@ const LoadableHome = reactLoadable({
         return import("./components/Home");
     },
     loading: Loading,
-    render: ({ Home }, props) => <Home {...props} />,
+    render: ({ Home }) => <Home />,
 });
 
 export const routesObject = {

@@ -35,8 +35,8 @@ export async function render(output: Writable, location: string, csr?: {
             <StaticRouter location={location} context={staticRouterContext}>
                 <App />
             </StaticRouter>
-        </div>),
-    );
+        </div>
+    ));
 
     /* istanbul ignore if: chunks do not exist during tests, so no modules are loaded */
     if (csr) {
