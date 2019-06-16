@@ -2,8 +2,8 @@
 import { resolve } from "path";
 import { ReactLoadablePlugin } from "react-loadable/webpack";
 import nodeExternals from "webpack-node-externals";
-import { createWebpackConfiguration, DIST_PATH_SERVER, DIST_PATH_REACT_LOADABLES_MANIFEST } from "../shared/build";
-import babelConfig from "./babel.config.js";
+import { DIST_PATH_REACT_LOADABLES_MANIFEST, DIST_PATH_SERVER, createWebpackConfiguration } from "../shared/build";
+import babelConfig from "./babel.config";
 
 const distRoot = (...paths: string[]) => resolve(__dirname, "../../", ...paths);
 

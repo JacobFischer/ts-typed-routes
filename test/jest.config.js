@@ -39,7 +39,8 @@ const jestConfig = {
         "\\\\node_modules\\\\", // do not test external modules
         "(babel|webpack|jest).config.(js|ts)", // config files for frameworks/tools
         ".eslintrc.js", // config file for eslint
-        "src/(client|server|static)/index.ts(x?)", // launchers for client/server. In truth they are tested, but these files are really an entry for webpack
+        // launchers for client/server. In truth they are tested, but these files are really an entry for webpack
+        "src/(client|server|static)/index.ts(x?)",
     ],
 
     // A list of reporter names that Jest uses when writing coverage reports

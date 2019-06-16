@@ -1,5 +1,5 @@
-import reactLoadable from "react-loadable";
 import React from "react";
+import reactLoadable from "react-loadable";
 import { About } from "./components/About";
 import { SomePage } from "./components/SomePage";
 

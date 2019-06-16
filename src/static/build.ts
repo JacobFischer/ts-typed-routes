@@ -1,8 +1,8 @@
+import { join } from "path";
 import { createWriteStream, ensureDir } from "fs-extra";
 import { preloadAll } from "react-loadable";
 import { render } from "../server/render";
 import { routes } from "../shared/routes";
-import { join } from "path";
 
 const silentLog: (...strings: string[]) => void = () => undefined;
 
@@ -18,8 +18,8 @@ export async function buildStaticPages(outputPath: string, log = silentLog) {
         let pathDir = rootDir(route);
         let filename = "index.html";
         if (route === "/404") {
-            pathDir = rootDir();  // we don't want the directory 404/,
-            filename = "404.html" // just the file 404.html
+            pathDir = rootDir(); // we don't want the directory 404/,
+            filename = "404.html"; // just the file 404.html
         }
 
         await ensureDir(pathDir);

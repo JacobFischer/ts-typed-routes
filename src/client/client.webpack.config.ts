@@ -1,8 +1,10 @@
 /* eslint-env node */
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
-import { createWebpackConfiguration, indexHtmlTemplate, ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR } from "../shared/build";
-import babelConfig from "./babel.config.js";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import {
+    ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, createWebpackConfiguration, indexHtmlTemplate,
+} from "../shared/build";
+import babelConfig from "./babel.config";
 
 export default createWebpackConfiguration(babelConfig, {
     entry: [

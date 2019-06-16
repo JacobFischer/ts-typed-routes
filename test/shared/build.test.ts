@@ -1,12 +1,12 @@
-import { readFile, stat } from "fs-extra";
 import { resolve } from "path";
+import { readFile, stat } from "fs-extra";
 import * as build from "../../src/shared/build";
 
 const rootDir = (...paths: string[]) => resolve(__dirname, "../../", ...paths);
-const isDirectory = async(...paths: string[]) => {
+const isDirectory = async (...paths: string[]) => {
     const stats = await stat(rootDir(...paths));
     return stats.isDirectory();
-}
+};
 
 
 describe("Test the build", () => {

@@ -1,7 +1,7 @@
 import { Server } from "http";
+import { Writable } from "stream";
 import puppeteer from "puppeteer";
 import { preloadAll } from "react-loadable";
-import { Writable } from "stream";
 import { render } from "../../src/server/render";
 import { start } from "../../src/server/start";
 import { routeExists } from "../../src/shared/routes";
@@ -12,7 +12,7 @@ const LONG_TIMEOUT = 12500; // for long tests that use puppeteer heavily
 let browser = undefined as unknown as puppeteer.Browser; // will be set first below
 beforeAll(() => Promise.all([
     preloadAll(),
-    puppeteer.launch().then(b => browser = b),
+    puppeteer.launch().then((b) => { browser = b; }),
 ]));
 
 afterAll(async () => browser && browser.close());
@@ -64,12 +64,16 @@ describe("Server", () => [
         }
 
         const chunks = new Array<string>();
-        const stream = new Writable({ write: (chunk, _, next) => {
-            chunks.push(String(chunk));
-            next();
-        }});
+        const stream = new Writable({
+            write: (chunk, _, next) => {
+                chunks.push(String(chunk));
+                next();
+            },
+        });
         await render(stream, location);
-        const expectedHtml = chunks.join("").replace("</div></body></html>", ""); // chop off the end, because scripts may exist
+
+        // chop off the end, because scripts may exist
+        const expectedHtml = chunks.join("").replace("</div></body></html>", "");
 
         const pageHtml = await page.content();
         expect(pageHtml).toContain(expectedHtml);

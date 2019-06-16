@@ -1,18 +1,20 @@
-import express from "express";
-import { stat } from "fs-extra";
 import { Server } from "http";
 import { join } from "path";
+import express from "express";
+import { stat } from "fs-extra";
 import puppeteer from "puppeteer";
-import { closeServer, getClientDistDir, isPortTaken, newExpressServer } from "../utils";
+import {
+    closeServer, getClientDistDir, isPortTaken, newExpressServer,
+} from "../utils";
 
 const PORT = 8888;
 let browser = undefined as unknown as puppeteer.Browser;
 let server = undefined as unknown as Server;
 beforeAll(() => Promise.all([
     puppeteer.launch()
-        .then((b) => browser = b),
+        .then((b) => { browser = b; }),
     newExpressServer(PORT, async (app) => app.use("/", express.static(await getClientDistDir())))
-        .then((s) => server = s),
+        .then((s) => { server = s; }),
 ]));
 
 afterAll(() => Promise.all([

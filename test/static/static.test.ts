@@ -1,7 +1,9 @@
-import { stat, remove, ensureDir, emptyDir, readdir } from "fs-extra";
 import { join, resolve } from "path";
-import { buildStaticPages } from "../../src/static/build";
+import {
+    emptyDir, ensureDir, readdir, remove, stat,
+} from "fs-extra";
 import { routes } from "../../src/shared/routes";
+import { buildStaticPages } from "../../src/static/build";
 
 const TEMP_DIR = resolve(__dirname, "../../temp/");
 const OUTPUT_DIR = join(TEMP_DIR, "static/");

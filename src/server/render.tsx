@@ -1,14 +1,14 @@
+import { Writable } from "stream";
 import React from "react";
 import { renderToNodeStream } from "react-dom/server";
 import { Capture } from "react-loadable";
-import { getBundles, Manifest } from 'react-loadable/webpack'
+import { Manifest, getBundles } from "react-loadable/webpack";
 import { StaticRouter, StaticRouterContext } from "react-router";
-import { ServerStyleSheet } from 'styled-components'
+import { ServerStyleSheet } from "styled-components";
+import urlJoin from "url-join";
 import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
 import { streamEnd } from "../shared/utils/streams";
-import urlJoin from "url-join";
-import { Writable } from "stream";
 
 /**
  * Renders the React app in a node (server) environment
@@ -25,9 +25,9 @@ export async function render(output: Writable, location: string, csr?: {
 
     const sheet = new ServerStyleSheet();
     const loadedModules = new Array<string>();
-    // normally we'd use a StaticRouter context to capture if the rendered route was a 404 not found;
+    // normally we"d use a StaticRouter context to capture if the rendered route was a 404 not found;
     // however we are streaming this response. So the HTTP Status Code has already been sent,
-    // thus we don't care at this point in time.
+    // thus we don"t care at this point in time.
     const staticRouterContext: StaticRouterContext = {};
 
     let jsx = sheet.collectStyles((
@@ -55,8 +55,7 @@ export async function render(output: Writable, location: string, csr?: {
     if (csr) {
         output.write(getBundles(csr.manifest, loadedModules)
             .map((bundle) => `<script src="${urlJoin("/", STATIC_BUNDLE_DIR, bundle.file)}"></script>`)
-            .join("") + csr.mainScripts,
-        );
+            .join("") + csr.mainScripts);
     }
 
     output.end(indexHtmlTemplate.bottom);

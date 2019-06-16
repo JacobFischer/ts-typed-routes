@@ -1,6 +1,6 @@
-import express from "express";
 import { Server } from "http";
 import { createServer } from "net";
+import express from "express";
 
 export const closeServer = (server: Server): Promise<void> => new Promise((resolve, reject) => {
     server.close((err) => {

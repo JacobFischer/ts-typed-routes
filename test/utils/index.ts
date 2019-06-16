@@ -1,5 +1,5 @@
-import { stat } from "fs-extra";
 import { join } from "path";
+import { stat } from "fs-extra";
 
 const CLIENT_DIST_DIR = join(__dirname, "../../dist/client/");
 export async function getClientDistDir(): Promise<string> {
