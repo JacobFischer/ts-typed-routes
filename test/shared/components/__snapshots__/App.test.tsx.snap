@@ -3,7 +3,7 @@
 exports[`App component renders 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -19,6 +19,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -47,7 +55,7 @@ Array [
 exports[`App component renders the About page 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -63,6 +71,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -86,7 +102,8 @@ Array [
     About
   </h2>,
   <p>
-    Jacob Fischer made this page! It's simple boilerplate to get up and moving ASAP.
+    Jacob Fischer
+     made this page! It's simple boilerplate to get up and moving ASAP.
   </p>,
 ]
 `;
@@ -94,7 +111,7 @@ Array [
 exports[`App component renders the NotFound page on bad routes 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -110,6 +127,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -141,7 +166,7 @@ Array [
 exports[`App component renders the SomePage page 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -157,6 +182,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -193,7 +226,7 @@ Array [
 exports[`App component renders the index Home page 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -209,6 +242,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -229,7 +270,7 @@ Array [
     </li>
   </ul>,
   <div
-    className="sc-bwzfXH kOKFyw"
+    className="sc-htpNat fxtGgv"
   >
     <h1>
       Home
@@ -244,7 +285,7 @@ Array [
 exports[`App component renders with React-Loadable once preloaded 1`] = `
 Array [
   <ul
-    className="sc-bdVaJa gyiZyl"
+    className="sc-bwzfXH edODBp"
   >
     <li>
       <a
@@ -260,6 +301,14 @@ Array [
         onClick={[Function]}
       >
         /about
+      </a>
+    </li>
+    <li>
+      <a
+        href="/clicker"
+        onClick={[Function]}
+      >
+        /clicker
       </a>
     </li>
     <li>
@@ -280,7 +329,7 @@ Array [
     </li>
   </ul>,
   <div
-    className="sc-bwzfXH kOKFyw"
+    className="sc-htpNat fxtGgv"
   >
     <h1>
       Home

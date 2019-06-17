@@ -36,6 +36,7 @@ const baseEslintConfig = {
         // React
         "react/prop-types": "off", // Redundant with TypeScript checking props
         "react/display-name": "off", // Babel plugin now injects display name
+        "react/jsx-one-expression-per-line": "off", // need to allow 1 expression literals multiple times, e.g. <p>Hello {firstName} {lastName}!</p>
 
         // TypeScript
         "@typescript-eslint/explicit-function-return-type": "off", // For now does not allow enough control over arrow functions, always requiring return types even on simple reducers and such.

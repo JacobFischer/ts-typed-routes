@@ -2,6 +2,7 @@ import React from "react";
 import reactLoadable from "react-loadable";
 import { About } from "./components/About";
 import { SomePage } from "./components/SomePage";
+import { StatefullComponent } from "./components/StatefullComponent";
 
 const delay = async (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 const Loading = () => <em>Loading</em>;
@@ -17,8 +18,9 @@ const LoadableHome = reactLoadable({
 
 export const routesObject = {
     "/": LoadableHome,
-    "/about": About,
+    "/about": () => <About creator="Jacob Fischer" />,
     "/some-page": SomePage,
+    "/clicker": StatefullComponent,
 };
 
 export const routeExists = (path: string) => Object.prototype.hasOwnProperty.call(routesObject, path);
