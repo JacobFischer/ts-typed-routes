@@ -8,6 +8,11 @@ const NavBar = styled.ul({
     backgroundColor: "red",
 });
 
+/**
+ * The core App. This is the entry-point into the React application.
+ *
+ * @returns a React functional component that drives the entire applications.
+ */
 export const App = () => (
     <>
         <NavBar>

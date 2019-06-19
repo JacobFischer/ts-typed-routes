@@ -8,10 +8,11 @@ import { ServerStyleSheet } from "styled-components";
 import urlJoin from "url-join";
 import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
-import { streamEnd } from "../shared/utils/streams";
+import { onEvent } from "../shared/utils";
 
 /**
- * Renders the React app in a node (server) environment
+ * Renders the React app in a node (server) environment.
+ *
  * @param output - the write stream to stream the html to as it is built
  * @param location - the location to render in the app
  * @param csr - client side rendering options to inject into the rendered html
@@ -49,7 +50,7 @@ export async function render(output: Writable, location: string, csr?: {
 
     const bodyStream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx));
     bodyStream.pipe(output, { end: false });
-    await streamEnd(bodyStream);
+    await onEvent("end", bodyStream);
 
     /* istanbul ignore if: once again, chunks are never found during tests */
     if (csr) {

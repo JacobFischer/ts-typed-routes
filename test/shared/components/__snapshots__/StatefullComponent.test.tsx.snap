@@ -3,7 +3,7 @@
 exports[`StatefullComponent component renders 1`] = `
 <div>
   <p>
-    You clicked 
+    You clicked me 
     0
      times
   </p>

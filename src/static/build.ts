@@ -6,6 +6,13 @@ import { routes } from "../shared/routes";
 
 const silentLog: (...strings: string[]) => void = () => undefined;
 
+/**
+ * Builds all the static pages for a completely static html site.
+ *
+ * @param outputPath - The path to output html files and directories that makeup the static site to.
+ * @param log - An optional log function to make this function verbose, such as `console.log`.
+ * @returns A promise that resolves once the static pages are generated.
+ */
 export async function buildStaticPages(outputPath: string, log = silentLog) {
     const rootDir = (...paths: string[]) => join(outputPath, ...paths);
     const routesAnd404 = ["/404", ...routes.map(([route]) => route)];

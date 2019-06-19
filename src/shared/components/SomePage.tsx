@@ -1,6 +1,11 @@
 import React from "react";
 
-export const SomePage = (): JSX.Element => (
+/**
+ * Just some page.
+ *
+ * @returns a react functional component.
+ */
+export const SomePage = () => (
     <>
         <h3>SomePage</h3>
         <p>This is just some random page.</p>
