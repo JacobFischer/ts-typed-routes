@@ -8,7 +8,6 @@ import { ServerStyleSheet } from "styled-components";
 import urlJoin from "url-join";
 import { ROOT_ELEMENT_ID, STATIC_BUNDLE_DIR, indexHtmlTemplate } from "../shared/build";
 import { App } from "../shared/components/App";
-import { onEvent } from "../shared/utils";
 
 /**
  * Renders the React app in a node (server) environment.
@@ -50,7 +49,7 @@ export async function render(output: Writable, location: string, csr?: {
 
     const bodyStream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx));
     bodyStream.pipe(output, { end: false });
-    await onEvent("end", bodyStream);
+    await new Promise((resolve) => bodyStream.once("end", resolve));
 
     /* istanbul ignore if: once again, chunks are never found during tests */
     if (csr) {
