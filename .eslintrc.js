@@ -9,7 +9,7 @@ const { resolve } = require("path");
 const baseEslintConfig = {
     env: {
         es6: true,
-        "shared-node-browser": true,
+        node: true,
     },
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -25,29 +25,21 @@ const baseEslintConfig = {
     },
     plugins: [
         "@typescript-eslint",
-        "react",
         "eslint-plugin-import-order-alphabetical",
         "jsdoc",
     ],
     extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended",
-        "airbnb",
+        "airbnb-base",
     ],
     rules: {
-        // React
-        "react/prop-types": "off", // TypeScript handles props' types at build time, much better than runtime.
-        "react/display-name": "off", // Babel plugin now injects display name
-        "react/jsx-one-expression-per-line": "off", // need to allow 1 expression literals multiple times, e.g. <p>Hello {firstName} {lastName}!</p>
-
         // TypeScript
         "@typescript-eslint/explicit-function-return-type": "off", // For now does not allow enough control over arrow functions, always requiring return types even on simple reducers and such.
 
         // Basically old rules from tslint ported over that override airbnb
         "quotes": [ENABLED_ERROR, "double"],
         "indent": [ENABLED_ERROR, 4],
-        "react/jsx-indent": [ENABLED_ERROR, 4], // same indent as above
         "arrow-parens": [ENABLED_ERROR, "always"],
         "sort-imports": "off", // terrible configuration options mean this cannot be enabled without unfixable errors
         "import-order-alphabetical/order": ENABLED_ERROR, // should be part of imports/order
@@ -56,7 +48,6 @@ const baseEslintConfig = {
         "import/prefer-default-export": "off", // named exports easier to refactor with types
         "no-array-constructor": "off", // new Array<type>() allows for more natural types usage
         "max-len": [ENABLED_ERROR, 120], // again from Microsoft's TSLint reccomended
-        "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }], // tsx not allowed by default
         "no-restricted-syntax": "off", // hyper controversial
 
         // JSDoc
@@ -108,14 +99,14 @@ const baseEslintConfig = {
         react: {
             version: "detect",
         },
-        "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "import/extensions": [".js", ".ts" ],
         "import/resolver": {
             node: {
-              extensions: [".js", ".jsx", ".ts", ".tsx"],
+              extensions: [".js", ".ts" ],
             },
         },
         "import/parsers": {
-            "@typescript-eslint/parser": [".ts", ".tsx"],
+            "@typescript-eslint/parser": [".ts" ],
         },
     },
 };
