@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { parameter, TypesafeRouteParameter } from "./parameter";
+import { TypesafeRouteParameter } from "./parameter";
 
 type ValuesOf<T extends unknown[]> = T[number]; // eslint-disable-line @typescript-eslint/no-explicit-any
 type ParameterType = TypesafeRouteParameter<string, any>;
@@ -92,10 +92,3 @@ export function route<
         }, {} as P),
     };
 }
-
-const r = route("lol", parameter("fuck", Number), "me", parameter("right", Boolean));
-const sr = route("lololol");
-
-sr.parameters;
-
-r.parameters.right
