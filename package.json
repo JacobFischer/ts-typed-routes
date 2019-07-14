@@ -27,6 +27,7 @@
     "typescript": "3.5.2"
   },
   "scripts": {
+    "start": "ts-node src/index.ts",
     "build": "tsc",
     "clean": "shx rm -rf .cache/ dist/",
     "purge": "npm run clean && shx rm -rf node_modules/ && rm -rf package-lock.json",
