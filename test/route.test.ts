@@ -13,10 +13,11 @@ describe("route", () => {
         const test = route("test");
 
         expect(typeof test).toBe("object");
-        expect(typeof test.parameters).toBe("object");
         expect(typeof test.create).toBe("function");
+        expect(typeof test.parse).toBe("function");
+        expect(typeof test.parameters).toBe("object");
         expect(typeof test.path).toBe("function");
-        expect(Object.keys(test)).toHaveLength(3);
+        expect(Object.keys(test)).toHaveLength(4);
     });
 
     it("works with parameters", () => {
@@ -56,5 +57,55 @@ describe("route", () => {
         const custom = route("test", parameter("one"), parameter("two"));
 
         expect(custom.path((s) => `>$-${s}-$<`)).toBe("test>$-one-$<>$-two-$<");
+    });
+
+    it("parses objects", () => {
+        const test = route("test", parameter("one", Number), parameter("two", Boolean));
+
+        const stringified = {
+            one: "1337",
+            two: "true",
+        };
+
+        expect(test.parse(stringified)).toMatchObject({
+            one: 1337,
+            two: true,
+        });
+    });
+
+    it("parses a partial object using default values", () => {
+        const test = route("test", parameter("three"), "hello", parameter("four", Boolean));
+
+        const stringified = {
+            three: "some%20string",
+            // NOTE: four is missing on purpose for this test
+        };
+
+        expect(Object.prototype.hasOwnProperty.call(stringified, "four")).toBe(false);
+
+        expect(test.parse(stringified, { useDefaults: true })).toMatchObject({
+            three: "some string",
+            four: false,
+        });
+    });
+
+    it("parses with other permutations of defaults", () => {
+        const test = route("test", parameter("five"));
+
+        const stringified = {
+            five: "hio",
+            // NOTE: four is missing on purpose for this test
+        };
+
+        const expected = stringified;
+
+        expect(test.parse(stringified, {})).toMatchObject(expected);
+        expect(test.parse(stringified, { useDefaults: false })).toMatchObject(expected);
+    });
+
+    it("throws on invalid objects to parse", () => {
+        const test = route("test", parameter("six"));
+
+        expect(() => test.parse({})).toThrow();
     });
 });
