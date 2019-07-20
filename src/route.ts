@@ -29,6 +29,12 @@ interface TypesafeRoute<T extends {}> {
     create(parameters: T): string;
 
     /**
+     * The default value(s) for parameters in this route.
+     * This exists mostly as a way to check for key and types at runtime.
+     */
+    defaults: Readonly<T>;
+
+    /**
      * Parses an object of key/value strings into their
      * @param obj - key value pairs to parse
      * @returns A new object of key values pairs, where each value was de-serialized.
@@ -42,12 +48,6 @@ interface TypesafeRoute<T extends {}> {
      * @returns the route's path with parameter names in place.
      */
     path(formatter?: (parameterName: string) => string): string;
-
-    /**
-     * The default value(s) for parameters in this route.
-     * This exists mostly as a way to check for key and types at runtime.
-     */
-    parameters: Readonly<T>;
 }
 
 /**
@@ -96,7 +96,7 @@ export function route<
         return parameters;
     }, {} as P);
 
-    const defaultParameters = asObject((parameter) => parameter.parser(""));
+    const defaults = asObject((parameter) => parameter.parser(""));
 
     return {
         concat<TSegments extends RouteSegment[]>(...newSegments: TSegments) {
@@ -109,13 +109,15 @@ export function route<
             )));
         },
 
+        defaults,
+
         parse(obj: { [key: string]: string | undefined }, options?: { useDefaults?: boolean }) {
             return asObject((parameter) => {
                 const key = parameter.name as keyof P;
                 const value = obj[parameter.name];
                 if (typeof value === "undefined") {
                     if (options && options.useDefaults) {
-                        return defaultParameters[key];
+                        return defaults[key];
                     }
                     throw new Error(`cannot parse ${obj}, missing expected key ${key}`);
                 }
@@ -127,7 +129,5 @@ export function route<
         path(formatter = (parameterName: string) => `:${parameterName}`) {
             return asString((p) => formatter(p.name));
         },
-
-        parameters: defaultParameters,
     };
 }

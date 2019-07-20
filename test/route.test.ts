@@ -33,7 +33,7 @@ describe("route", () => {
         );
         expect(routeWithParameters).toBeTruthy();
 
-        const parameterNames = Object.keys(routeWithParameters.parameters).sort();
+        const parameterNames = Object.keys(routeWithParameters.defaults).sort();
         const expectedParameterNames = ["someNumber", "aString"].sort();
         expect(parameterNames).toMatchObject(expectedParameterNames);
 
@@ -53,7 +53,7 @@ describe("route", () => {
         const routeOnlyStrings = route(...strings);
         expect(routeOnlyStrings).toBeTruthy();
 
-        expect(Object.keys(routeOnlyStrings.parameters)).toHaveLength(0);
+        expect(Object.keys(routeOnlyStrings.defaults)).toHaveLength(0);
         expect(routeOnlyStrings.path()).toBe(fullRoute);
         expect(routeOnlyStrings.path((s) => `---${s.toUpperCase()}---`)).toBe(fullRoute);
         expect(routeOnlyStrings.create()).toBe(fullRoute);
@@ -118,10 +118,14 @@ describe("route", () => {
 
     it("concats new routes", () => {
         const test = route("test", parameter("seven"));
+        expect(Object.keys(test.defaults)).toMatchObject(["seven"]);
 
         const combined = test.concat("another-test", parameter("eight"));
 
         expect(combined).toBeTruthy();
-        expect(Object.keys(combined.parameters).sort()).toMatchObject(["seven", "eight"].sort());
+        expect(Object.keys(combined.defaults).sort()).toMatchObject(["seven", "eight"].sort());
+
+        // ensure it did not mutate
+        expect(Object.keys(test.defaults)).toMatchObject(["seven"]);
     });
 });
