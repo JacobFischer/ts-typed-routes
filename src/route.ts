@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { TypesafeRouteParameter, parameter } from "./parameter";
+import { TypesafeRouteParameter } from "./parameter";
 
 type ValuesOf<T extends unknown[]> = T[number]; // eslint-disable-line @typescript-eslint/no-explicit-any
 type ParameterType = TypesafeRouteParameter<string, any>;
@@ -11,7 +11,15 @@ type ParametersObject<T extends RouteSegment[]> = {
 };
 
 /** A utility route for handing serialization and de-serialization to and from routes matching it. */
-interface TypesafeRoute<T extends {}>{
+interface TypesafeRoute<T extends {}> {
+    /**
+     * Creates a new route by concating new string(s) and parameter(s) into this one.
+     *
+     * @param segments - The new segments to concat to the end of this route.
+     * @returns A new route that is this current route, with new segments on the end. This route is not mutated.
+     */
+    concat<TSegments extends RouteSegment[]>(...segments: TSegments): TypesafeRoute<T & ParametersObject<TSegments>>;
+
     /**
      * Creates a new route injecting values to the parmeters.
      *
@@ -91,6 +99,10 @@ export function route<
     const defaultParameters = asObject((parameter) => parameter.parser(""));
 
     return {
+        concat<TSegments extends RouteSegment[]>(...newSegments: TSegments) {
+            return route(...segments, ...newSegments);
+        },
+
         create(parameters: P) {
             return asString(p => encodeURIComponent(p.stringify(
                 parameters[p.name as keyof P] as any,

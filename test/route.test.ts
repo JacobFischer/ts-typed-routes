@@ -12,12 +12,19 @@ describe("route", () => {
     it("route has the correct shape", () => {
         const test = route("test");
 
-        expect(typeof test).toBe("object");
-        expect(typeof test.create).toBe("function");
-        expect(typeof test.parse).toBe("function");
-        expect(typeof test.parameters).toBe("object");
-        expect(typeof test.path).toBe("function");
-        expect(Object.keys(test)).toHaveLength(4);
+        const shape = {
+            concat: "function",
+            create: "function",
+            parse: "function",
+            parameters: "object",
+            path: "function",
+        } as const;
+
+        Object.entries(shape).forEach(([key, value]) => {
+            expect(typeof test[key as keyof typeof shape]).toBe(value);
+        });
+
+        expect(Object.keys(test).sort()).toMatchObject(Object.keys(shape).sort());
     });
 
     it("works with parameters", () => {
@@ -107,5 +114,14 @@ describe("route", () => {
         const test = route("test", parameter("six"));
 
         expect(() => test.parse({})).toThrow();
+    });
+
+    it("concats new routes", () => {
+        const test = route("test", parameter("seven"));
+
+        const combined = test.concat("another-test", parameter("eight"));
+
+        expect(combined).toBeTruthy();
+        expect(Object.keys(combined.parameters).sort()).toMatchObject(["seven", "eight"].sort());
     });
 });
