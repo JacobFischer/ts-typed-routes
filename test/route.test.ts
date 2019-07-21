@@ -16,9 +16,11 @@ describe("route", () => {
             concat: "function",
             create: "function",
             parse: "function",
-            parameters: "object",
+            defaults: "object",
             path: "function",
         } as const;
+
+        expect(Object.keys(shape).sort()).toMatchObject(Object.keys(test).sort());
 
         Object.entries(shape).forEach(([key, value]) => {
             expect(typeof test[key as keyof typeof shape]).toBe(value);
