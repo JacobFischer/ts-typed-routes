@@ -1,8 +1,8 @@
 {
-  "name": "flexi-stack",
+  "name": "typesafe-routes",
   "version": "0.0.1",
-  "description": "Flexible stack of boilerplates for rapid web app development",
-  "main": "dist/server/index.js",
+  "description": "Routes built and re-usable with typesafe parameters",
+  "main": "dist/index.js",
   "repository": "git@github.com:JacobFischer/Flexi-Stack-Boilerplate.git",
   "author": "Jacob Fischer <jacob.t.fischer@gmail.com>",
   "license": "MIT",

@@ -1,37 +1,66 @@
-# Flexi Stack Boilerplate
+# Typesafe Routes
 
-Flexible stack of boilerplates for rapid web app development.
+Routes built and re-usable with typesafe parameters.
 
-The stack is flexible in that it can be used for client and/or server
-development.
+## Examples
 
-You want 100% server side code, cool. You want 100% client side? Also cool.
-Or both, with initial server side rendering, followed by client side
-rendering? Yup got that.
-How about no sever or clients, just build a completely static site? Sure why
-not.
+### Creating routes
 
-This stack is completely opinionated based on my choices, but should be
-flexible enough if someone else wants to use it. It's sole purpose is to
-demonstrate a simple web application that has all the tooling you could want
-for any real software engineering project.
+```ts
+const dashboardRoute = route("dashboard/");
 
-## Stack
+const dashboardRaw = dashboardRoute.raw(); // "dashboard/"
+const dashboardPath = dashboardRoute.create(); // "dashboard/"
+```
 
-- TypeScript
-- React
-- Webpack (client bundles)
-- Babel (client transpiling)
-- Jest (testing + coverage)
-- ESlint (linting)
-- styled-components for CSS styling
-- express and react-dom for streaming server side rendering
+### Parameters in routes
 
-## Other notes
+```ts
+const userProfileRoute = route("profile/", parameter("userId"), "/", parameter("tab"));
 
-The tests have 100% code coverage. That's incredibly hard to maintain in the
-real world, but it does not start you ham stringed.
+const userProfiledRaw = userProfileRoute.raw(); // "profile/:userId/:tab"
+const userProfilePath = userProfileRoute.create({ // "profile/JohnDoe1337/activity"
+    userId: "JohnDoe1337",
+    tab: "activity",
+});
+/*
+Note, the above create function is typed using TypeScript,
+and requires the following type: { userId: string; tab: string }
+*/
+```
 
-ALso linter rules are based off ESLint's reccomended settings, however for any
-rules not clearly defined I use my opinion on good code, and basically every
-other developer will have differing opinions.
+### Typed parameters
+
+You can supply an optional function that takes a string and returns the actual type you want for that parameter. This is handy using built in type constructions such as `Number` and `Boolean` to clearly
+indicate to other developers what the type of that parameter should be.
+
+```ts
+const blogRoute = route("blog/posts/", parameter("count", Number));
+
+const blogRaw = blogRoute.raw(); // "blog/posts/:count"
+const blogPath = blogRoute.create({ count: 5 }); // "blog/posts/5"
+// the create() function requires the TypeScript type: { count: number }
+```
+
+### Custom types parameters
+
+For complex types that cannot be easily serialized from a string you can supply a decoder function too.
+
+```ts
+type WeirdObject = {
+    weird?: boolean;
+    object: string;
+};
+
+const toWeirdObject = (str: string) => JSON.parse(str) as WeirdObject;
+const fromWeirdObject = (obj: WeirdObject) => JSON.stringify(obj);
+
+const weirdObjectRoute = route("store/", parameter("weirdObject", toWeirdObject, fromWeirdObject));
+
+const weirdObjectRaw = weirdObjectRoute.raw(); // "store/:weirdObject"
+const weirdObjectPath = weirdObjectRoute.path({ weirdObject: {
+    weird: true,
+    object: "something",
+}}); // "store/%7B%22weird%22%3Atrue%2C%22object%22%3A%22something%22%7D"
+// Note: the above path is a url encoded JSON string, hence so many escaped characters
+```

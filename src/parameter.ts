@@ -1,4 +1,5 @@
 /* eslint-disable import/export */// TS allows us to export multiple times for overloaded function signatures
+/* eslint-disable @typescript-eslint/no-explicit-any */// any required here for Parameter types
 
 /** A parameter in a typesafe route, used to name and convert to and from strings. */
 export interface TypesafeRouteParameter<
