@@ -1,5 +1,7 @@
 import { route, parameter } from "../src";
 
+const keysOf = (obj: {}) => Object.keys(obj).sort();
+
 describe("route", () => {
     it("exists", () => {
         expect(route).toBeTruthy();
@@ -20,13 +22,13 @@ describe("route", () => {
             path: "function",
         } as const;
 
-        expect(Object.keys(shape).sort()).toMatchObject(Object.keys(test).sort());
+        expect(keysOf(shape)).toMatchObject(keysOf(test));
 
         Object.entries(shape).forEach(([key, value]) => {
             expect(typeof test[key as keyof typeof shape]).toBe(value);
         });
 
-        expect(Object.keys(test).sort()).toMatchObject(Object.keys(shape).sort());
+        expect(keysOf(test)).toMatchObject(keysOf(shape));
     });
 
     it("works with parameters", () => {
@@ -35,9 +37,7 @@ describe("route", () => {
         );
         expect(routeWithParameters).toBeTruthy();
 
-        const parameterNames = Object.keys(routeWithParameters.defaults).sort();
-        const expectedParameterNames = ["someNumber", "aString"].sort();
-        expect(parameterNames).toMatchObject(expectedParameterNames);
+        expect(keysOf(routeWithParameters.defaults)).toMatchObject(["someNumber", "aString"].sort());
 
         const expectedPath = "first/:someNumber/third/parameter/:aString";
         expect(routeWithParameters.path()).toBe(expectedPath);
@@ -55,7 +55,7 @@ describe("route", () => {
         const routeOnlyStrings = route(...strings);
         expect(routeOnlyStrings).toBeTruthy();
 
-        expect(Object.keys(routeOnlyStrings.defaults)).toHaveLength(0);
+        expect(keysOf(routeOnlyStrings.defaults)).toMatchObject([]);
         expect(routeOnlyStrings.path()).toBe(fullRoute);
         expect(routeOnlyStrings.path((s) => `---${s.toUpperCase()}---`)).toBe(fullRoute);
         expect(routeOnlyStrings.create()).toBe(fullRoute);
@@ -120,14 +120,14 @@ describe("route", () => {
 
     it("concats new routes", () => {
         const test = route("test", parameter("seven"));
-        expect(Object.keys(test.defaults)).toMatchObject(["seven"]);
+        expect(keysOf(test.defaults)).toMatchObject(["seven"]);
 
         const combined = test.concat("another-test", parameter("eight"));
 
         expect(combined).toBeTruthy();
-        expect(Object.keys(combined.defaults).sort()).toMatchObject(["seven", "eight"].sort());
+        expect(keysOf(combined.defaults)).toMatchObject(["seven", "eight"].sort());
 
         // ensure it did not mutate
-        expect(Object.keys(test.defaults)).toMatchObject(["seven"]);
+        expect(keysOf(test.defaults)).toMatchObject(["seven"]);
     });
 });
