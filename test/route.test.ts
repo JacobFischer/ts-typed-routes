@@ -119,15 +119,17 @@ describe("route", () => {
     });
 
     it("concats new routes", () => {
-        const test = route("test", parameter("seven"));
-        expect(keysOf(test.defaults)).toMatchObject(["seven"]);
+        const subRoute = route("test", parameter("seven"));
+        expect(keysOf(subRoute.defaults)).toMatchObject(["seven"]);
 
-        const combined = test.concat("another-test", parameter("eight"));
+        const combined = subRoute.concat("another-test", parameter("eight"));
 
         expect(combined).toBeTruthy();
         expect(keysOf(combined.defaults)).toMatchObject(["seven", "eight"].sort());
 
         // ensure it did not mutate
-        expect(keysOf(test.defaults)).toMatchObject(["seven"]);
+        expect(keysOf(subRoute.defaults)).toMatchObject(["seven"]);
+
+        expect(combined.create({ seven: "7", eight: "8" })).toContain(subRoute.create({ seven: "7" }));
     });
 });

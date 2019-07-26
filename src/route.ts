@@ -104,9 +104,7 @@ export function route<
         },
 
         create(parameters: P) {
-            return asString(p => encodeURIComponent(p.stringify(
-                parameters[p.name as keyof P] as any,
-            )));
+            return asString(p => encodeURIComponent(p.stringify(parameters[p.name as keyof P])));
         },
 
         defaults,
