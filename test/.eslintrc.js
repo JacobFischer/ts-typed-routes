@@ -1,17 +1,9 @@
 // @ts-check
+/* eslint-disable jsdoc/valid-types */
 
 /** @type {typeof import("../.eslintrc.js")} */
 const testEslintConfig = {
-    env: {
-        jest: true,
-        "jest/globals": true,
-        node: true,
-    },
-    plugins: [ "jest" ],
-    extends: [
-        "../.eslintrc.js",
-        "plugin:jest/recommended",
-    ],
+    extends: ["jacobfischer-jest", "../.eslintrc.js"],
 };
 
 module.exports = testEslintConfig;

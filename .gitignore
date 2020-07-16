@@ -99,6 +99,5 @@ ehthumbs.db
 Thumbs.db
 
 # build artifacts
-package-lock.json
 dist/
 temp/

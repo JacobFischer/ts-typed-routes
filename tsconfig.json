@@ -3,13 +3,6 @@
         "target": "es3",
         "module": "commonjs",
         "lib": [],
-        "rootDir": "src/",
-        "outDir": "dist",
-
-        "declaration": true,
         "strict": true,
     },
-    "include": [
-        "src/**/*.ts",
-    ],
 }
