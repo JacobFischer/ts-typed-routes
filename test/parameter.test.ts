@@ -1,44 +1,44 @@
-import { parameter } from "../src";
+import { parameter } from '../src';
 
-describe("parameter", () => {
-    it("exists", () => {
-        expect(parameter).toBeTruthy();
-    });
+describe('parameter', () => {
+  it('exists', () => {
+    expect(parameter).toBeTruthy();
+  });
 
-    it("is a function", () => {
-        expect(typeof parameter).toBe("function");
-    });
+  it('is a function', () => {
+    expect(typeof parameter).toBe('function');
+  });
 
-    it("works with one argument", () => {
-        const one = parameter("one");
-        const expected: typeof one = {
-            name: "one",
-            parser: String,
-            stringify: String,
-        };
+  it('works with one argument', () => {
+    const one = parameter('one');
+    const expected: typeof one = {
+      name: 'one',
+      parser: String,
+      stringify: String,
+    };
 
-        expect(one).toMatchObject(expected);
-    });
+    expect(one).toMatchObject(expected);
+  });
 
-    it("works with two arguments", () => {
-        const two = parameter("two", Number);
-        const expected: typeof two = {
-            name: "two",
-            parser: Number,
-            stringify: String,
-        };
+  it('works with two arguments', () => {
+    const two = parameter('two', Number);
+    const expected: typeof two = {
+      name: 'two',
+      parser: Number,
+      stringify: String,
+    };
 
-        expect(two).toMatchObject(expected);
-    });
+    expect(two).toMatchObject(expected);
+  });
 
-    it("works with three arguments", () => {
-        const three = parameter("three", Boolean);
-        const expected: typeof three = {
-            name: "three",
-            parser: Boolean,
-            stringify: String,
-        };
+  it('works with three arguments', () => {
+    const three = parameter('three', Boolean);
+    const expected: typeof three = {
+      name: 'three',
+      parser: Boolean,
+      stringify: String,
+    };
 
-        expect(three).toMatchObject(expected);
-    });
+    expect(three).toMatchObject(expected);
+  });
 });
