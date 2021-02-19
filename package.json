@@ -1,5 +1,5 @@
 {
-  "name": "typesafe-routes",
+  "name": "ts-typed-routes",
   "version": "0.0.1",
   "description": "Routes built and re-usable with typesafe parameters",
   "main": "dist/index.js",

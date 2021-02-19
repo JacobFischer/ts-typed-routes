@@ -35,6 +35,16 @@ and requires the following type: { userId: string; tab: string }
 */
 ```
 
+### Parent Routes
+
+```ts
+// we want to have the page /user/:id and /user/:id/friends/:page?
+
+const userRoute = route('/user/', parameter('friends'));
+const userFriendsRoute = userRoute.concat('/friends/', Parameter("page", OptionalNumber));
+
+```
+
 ### Typed parameters
 
 You can supply an optional function that takes a string and returns the actual

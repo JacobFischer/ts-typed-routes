@@ -16,11 +16,11 @@ describe('route()', () => {
     const test = route('test');
 
     const shape = {
-      concat: 'function',
-      create: 'function',
+      extend: 'function',
       parse: 'function',
       defaults: 'object',
       path: 'function',
+      with: 'function',
     } as const;
 
     expect(keysOf(shape)).toMatchObject(keysOf(test));
@@ -50,7 +50,7 @@ describe('route()', () => {
 
     const expectedWithParameters = 'first/1337/third/parameter/hello%20there';
     expect(
-      routeWithParameters.create({
+      routeWithParameters.with({
         aString: 'hello there',
         someNumber: 1337,
       }),
@@ -65,11 +65,12 @@ describe('route()', () => {
 
     expect(keysOf(routeOnlyStrings.defaults)).toMatchObject([]);
     expect(routeOnlyStrings.path()).toBe(fullRoute);
-    expect(routeOnlyStrings.path((s) => `---${s.toUpperCase()}---`)).toBe(
-      fullRoute,
-    );
-    expect(routeOnlyStrings.create()).toBe(fullRoute);
-    expect(routeOnlyStrings.create({})).toBe(fullRoute);
+
+    const formatter = jest.fn((s: string) => `---${s}---`);
+    expect(routeOnlyStrings.path(formatter)).toBe(fullRoute);
+    expect(formatter).toBeCalledTimes(0);
+
+    expect(routeOnlyStrings.with({})).toBe(fullRoute);
   });
 
   it('works with a custom replacer', () => {
@@ -141,11 +142,11 @@ describe('route()', () => {
     expect(() => test.parse({})).toThrow();
   });
 
-  it('concats new routes', () => {
+  it('extends new routes', () => {
     const subRoute = route('test', parameter('seven'));
     expect(keysOf(subRoute.defaults)).toMatchObject(['seven']);
 
-    const combined = subRoute.concat('another-test', parameter('eight'));
+    const combined = subRoute.extend('another-test', parameter('eight'));
 
     expect(combined).toBeTruthy();
     expect(keysOf(combined.defaults)).toMatchObject(['seven', 'eight'].sort());
@@ -153,8 +154,8 @@ describe('route()', () => {
     // ensure it did not mutate
     expect(keysOf(subRoute.defaults)).toMatchObject(['seven']);
 
-    expect(combined.create({ seven: '7', eight: '8' })).toContain(
-      subRoute.create({ seven: '7' }),
+    expect(combined.with({ seven: '7', eight: '8' })).toContain(
+      subRoute.with({ seven: '7' }),
     );
   });
 });

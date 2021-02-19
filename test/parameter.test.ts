@@ -1,44 +1,57 @@
-import { parameter } from '../src';
+import { BaseParameter, optionalParameter, parameter } from '../src';
 
-describe('parameter', () => {
-  it('exists', () => {
-    expect(parameter).toBeTruthy();
-  });
+type ParameterFunction<TType = unknown, TName extends string = string> = (
+  name: TName,
+  parser?: (serialized: string) => TType,
+  stringify?: (value: TType) => string,
+) => BaseParameter<TName, TType, boolean>;
 
-  it('is a function', () => {
-    expect(typeof parameter).toBe('function');
-  });
+([optionalParameter, parameter] as ParameterFunction[]).forEach((param) =>
+  describe(`${param.name} function`, () => {
+    const optional = param.name.includes('optional');
 
-  it('works with one argument', () => {
-    const one = parameter('one');
-    const expected: typeof one = {
-      name: 'one',
-      parser: String,
-      stringify: String,
-    };
+    it('exists', () => {
+      expect(param).toBeTruthy();
+    });
 
-    expect(one).toMatchObject(expected);
-  });
+    it('is a function', () => {
+      expect(typeof param).toBe('function');
+    });
 
-  it('works with two arguments', () => {
-    const two = parameter('two', Number);
-    const expected: typeof two = {
-      name: 'two',
-      parser: Number,
-      stringify: String,
-    };
+    it('works with one argument', () => {
+      const one = param('one');
+      const expected: typeof one = {
+        name: 'one',
+        optional,
+        parser: String,
+        stringify: String,
+      };
 
-    expect(two).toMatchObject(expected);
-  });
+      expect(one).toMatchObject(expected);
+    });
 
-  it('works with three arguments', () => {
-    const three = parameter('three', Boolean);
-    const expected: typeof three = {
-      name: 'three',
-      parser: Boolean,
-      stringify: String,
-    };
+    it('works with two arguments', () => {
+      const two = param('two', Number);
+      const expected: typeof two = {
+        name: 'two',
+        optional,
+        parser: Number,
+        stringify: String,
+      };
 
-    expect(three).toMatchObject(expected);
-  });
-});
+      expect(two).toMatchObject(expected);
+    });
+
+    it('works with three arguments', () => {
+      const three = param('three', Boolean);
+      const expected: typeof three = {
+        name: 'three',
+        optional,
+        parser: Boolean,
+        stringify: String,
+      };
+
+      expect(three).toMatchObject(expected);
+    });
+  }),
+);
