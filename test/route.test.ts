@@ -1,4 +1,4 @@
-import { route, parameter } from '../src';
+import { route, parameter, optionalParameter } from '../src';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const keysOf = (obj: {}) => Object.keys(obj).sort();
@@ -17,10 +17,10 @@ describe('route()', () => {
 
     const shape = {
       extend: 'function',
+      format: 'function',
       parse: 'function',
       defaults: 'object',
       path: 'function',
-      with: 'function',
     } as const;
 
     expect(keysOf(shape)).toMatchObject(keysOf(test));
@@ -32,130 +32,262 @@ describe('route()', () => {
     expect(keysOf(test)).toMatchObject(keysOf(shape));
   });
 
-  it('works with parameters', () => {
-    const routeWithParameters = route(
-      'first/',
-      parameter('someNumber', Number),
-      '/third/parameter/',
-      parameter('aString'),
-    );
-    expect(routeWithParameters).toBeTruthy();
+  describe('.extend()', () => {
+    it('extends route', () => {
+      const { extend } = route('one', 'two', 'three');
+      const extended = extend('four', 'five', 'six');
+      expect(extended.path()).toBe('one/two/three/four/five/six');
+    });
 
-    expect(keysOf(routeWithParameters.defaults)).toMatchObject(
-      ['someNumber', 'aString'].sort(),
-    );
+    it('extends without dropping parameters', () => {
+      const { extend } = route(
+        parameter('baseReq', Boolean),
+        optionalParameter('baseOpt'),
+      );
+      const extended = extend(
+        optionalParameter('extOpt', Number),
+        parameter('extReq'),
+      );
 
-    const expectedPath = 'first/:someNumber/third/parameter/:aString';
-    expect(routeWithParameters.path()).toBe(expectedPath);
+      expect(extended.defaults).toMatchObject({
+        baseReq: false,
+        baseOpt: '',
+        extOpt: 0,
+        extReq: '',
+      });
 
-    const expectedWithParameters = 'first/1337/third/parameter/hello%20there';
-    expect(
-      routeWithParameters.with({
-        aString: 'hello there',
-        someNumber: 1337,
-      }),
-    ).toBe(expectedWithParameters);
-  });
+      expect(
+        extended.format({
+          baseReq: true,
+          baseOpt: 'hello',
+          extReq: 'world',
+          extOpt: 1337,
+        }),
+      ).toBe('true/hello/1337/world');
 
-  it('works with just strings', () => {
-    const strings = ['this/only/has', '/strings', '/in/it'] as const;
-    const fullRoute = strings.join('');
-    const routeOnlyStrings = route(...strings);
-    expect(routeOnlyStrings).toBeTruthy();
-
-    expect(keysOf(routeOnlyStrings.defaults)).toMatchObject([]);
-    expect(routeOnlyStrings.path()).toBe(fullRoute);
-
-    const formatter = jest.fn((s: string) => `---${s}---`);
-    expect(routeOnlyStrings.path(formatter)).toBe(fullRoute);
-    expect(formatter).toBeCalledTimes(0);
-
-    expect(routeOnlyStrings.with({})).toBe(fullRoute);
-  });
-
-  it('works with a custom replacer', () => {
-    const custom = route('test', parameter('one'), parameter('two'));
-
-    expect(custom.path((s) => `>$-${s}-$<`)).toBe('test>$-one-$<>$-two-$<');
-  });
-
-  it('parses objects', () => {
-    const test = route(
-      'test',
-      parameter('one', Number),
-      parameter('two', Boolean),
-    );
-
-    const stringified = {
-      one: '1337',
-      two: 'true',
-    };
-
-    expect(test.parse(stringified)).toMatchObject({
-      one: 1337,
-      two: true,
+      expect(
+        extended.format({
+          baseReq: true,
+          extReq: 'world',
+        }),
+      ).toBe('true/world');
     });
   });
 
-  it('parses a partial object using default values', () => {
-    const test = route(
-      'test',
-      parameter('three'),
-      'hello',
-      parameter('four', Boolean),
-    );
+  describe('.parse()', () => {
+    it('can parse objects', () => {
+      const { parse } = route(
+        'one',
+        parameter('two', Number),
+        parameter('three', Boolean),
+        'four',
+      );
 
-    const stringified = {
-      three: 'some%20string',
-      // NOTE: four is missing on purpose for this test
-    };
+      expect(typeof parse).toBe('function');
+      expect(parse({ two: '2', three: '' })).toMatchObject({
+        two: 2,
+        three: false,
+      });
+    });
 
-    expect(Object.prototype.hasOwnProperty.call(stringified, 'four')).toBe(
-      false,
-    );
+    it('throws when missing expected keys', () => {
+      const { parse } = route('one', parameter('two'));
 
-    expect(test.parse(stringified, { useDefaults: true })).toMatchObject({
-      three: 'some string',
-      four: false,
+      expect(() => parse({})).toThrow();
+    });
+
+    it('throws when missing defaults and not using defaults', () => {
+      const { parse } = route('one', parameter('two'));
+
+      expect(() => parse({}, { useDefaults: false })).toThrow();
+    });
+
+    it('does not throw when missing optional parameters', () => {
+      const { parse } = route(optionalParameter('num', Number));
+      expect(parse({})).toMatchObject({ num: 0 });
+    });
+
+    it('useDefaults to restore default values', () => {
+      const { parse } = route('you', parameter('them'));
+
+      expect(parse({}, { useDefaults: true })).toMatchObject({ them: '' });
+    });
+
+    it('decodes strings that are URL encoded by default', () => {
+      const { parse } = route('start', parameter('part'));
+
+      const str = '/-$-^-%';
+      const encoded = encodeURIComponent(str);
+      expect(parse({ part: encoded })).toMatchObject({ part: str });
+    });
+
+    it('decodes strings using custom decoders', () => {
+      const { parse } = route(parameter('custom'));
+
+      const str = 'ENCODED-IN-UPPER-CASE';
+      const decoder = (s: string) => s.toLowerCase();
+      expect(parse({ custom: str }, { decoder })).toMatchObject({
+        custom: str.toLowerCase(),
+      });
     });
   });
 
-  it('parses with other permutations of defaults', () => {
-    const test = route('test', parameter('five'));
+  describe('.defaults', () => {
+    it('has defaults', () => {
+      expect(route('empty').defaults).toMatchObject({});
+    });
 
-    const stringified = {
-      five: 'hio',
-      // NOTE: four is missing on purpose for this test
-    };
-
-    const expected = stringified;
-
-    expect(test.parse(stringified, {})).toMatchObject(expected);
-    expect(test.parse(stringified, { useDefaults: false })).toMatchObject(
-      expected,
-    );
+    it('has defaults for all parameters', () => {
+      const { defaults } = route(
+        'start',
+        parameter('str'),
+        parameter('bool', Boolean),
+        optionalParameter('num', Number),
+      );
+      expect(defaults).toMatchObject({ str: '', num: 0, bool: false });
+    });
   });
 
-  it('throws on invalid objects to parse', () => {
-    const test = route('test', parameter('six'));
+  describe('.path()', () => {
+    it('has a path function', () => {
+      const { path } = route();
+      expect(typeof path).toBe('function');
+    });
 
-    expect(() => test.parse({})).toThrow();
+    it('formats a path', () => {
+      const { path } = route(
+        'one',
+        parameter('two'),
+        optionalParameter('three'),
+      );
+
+      expect(path()).toBe('one/:two/:three?');
+    });
+
+    it('can set options.joiner', () => {
+      const { path } = route('foo', 'bar', 'baz');
+
+      expect(path({ joiner: '-+-' })).toBe('foo-+-bar-+-baz');
+    });
+
+    it('can set options.formatter', () => {
+      const { path } = route(parameter('parm'), parameter('last'));
+
+      expect(path({ formatter: (name) => `<${name} />` })).toBe(
+        '<parm />/<last />',
+      );
+    });
+
+    it('can set options.formatter and options.joiner', () => {
+      const { path } = route(parameter('alpha'), parameter('omega'));
+
+      expect(
+        path({
+          formatter: (name) => `_[${name}]_`,
+          joiner: '---',
+        }),
+      ).toBe('_[alpha]_---_[omega]_');
+    });
+
+    it('has options.formatter with correct args', () => {
+      const { path } = route(
+        optionalParameter('optional'),
+        parameter('required'),
+        optionalParameter('also-optional'),
+        parameter('also-required'),
+      );
+
+      expect(
+        path({
+          formatter: (name, optional) => {
+            expect(typeof name).toBe('string');
+            expect(typeof optional).toBe('boolean');
+            expect(optional).toBe(name.includes('optional'));
+
+            return 'X';
+          },
+        }),
+      ).toBe('X/X/X/X');
+    });
   });
 
-  it('extends new routes', () => {
-    const subRoute = route('test', parameter('seven'));
-    expect(keysOf(subRoute.defaults)).toMatchObject(['seven']);
+  describe('.format()', () => {
+    it('is a function', () => {
+      expect(typeof route().format).toBe('function');
+    });
 
-    const combined = subRoute.extend('another-test', parameter('eight'));
+    it('formats the path with given values', () => {
+      const { format } = route(
+        'root',
+        parameter('user'),
+        parameter('page', Number),
+        optionalParameter('count', Number),
+      );
 
-    expect(combined).toBeTruthy();
-    expect(keysOf(combined.defaults)).toMatchObject(['seven', 'eight'].sort());
+      expect(
+        format({
+          user: 'alice',
+          page: 2,
+          count: 10,
+        }),
+      ).toBe('root/alice/2/10');
+    });
 
-    // ensure it did not mutate
-    expect(keysOf(subRoute.defaults)).toMatchObject(['seven']);
+    it('does not require optional parameters', () => {
+      const { format } = route(
+        'start',
+        parameter('req'),
+        optionalParameter('opt'),
+        optionalParameter('alsoOpt'),
+        parameter('alsoReq'),
+        'end',
+      );
 
-    expect(combined.with({ seven: '7', eight: '8' })).toContain(
-      subRoute.with({ seven: '7' }),
-    );
+      expect(
+        format({
+          alsoReq: 'also_exists',
+          req: 'some-string',
+        }),
+      ).toBe('start/some-string/also_exists/end');
+    });
+
+    it('drops optional paths', () => {
+      const { format } = route(
+        optionalParameter('alpha'),
+        optionalParameter('beta'),
+        optionalParameter('charlie'),
+        optionalParameter('delta'),
+      );
+
+      expect(format({})).toBe('');
+    });
+
+    it('is identical with no parameter paths', () => {
+      const r = route('first', 'second', 'third');
+      expect(r.format({})).toBe(r.path());
+    });
+
+    it('has options.joiner for custom joiners', () => {
+      const { format } = route('root', 'sub', 'end');
+      expect(format({}, { joiner: '~' })).toBe('root~sub~end');
+      expect(format({}, { joiner: '' })).toBe('rootsubend');
+    });
+
+    it('encodes url results', () => {
+      const { format } = route('start', parameter('val'));
+
+      const val = '/-$-^-%';
+      const encoded = encodeURIComponent(val);
+      expect(format({ val })).toBe(`start/${encoded}`);
+    });
+
+    it('has options.encoder for custom encoded strings', () => {
+      const { format } = route(parameter('one'), parameter('two'));
+
+      const val = '#-@-+-=';
+      expect(format({ one: val, two: val }, { encoder: (s) => s })).toBe(
+        `${val}/${val}`,
+      );
+    });
   });
 });

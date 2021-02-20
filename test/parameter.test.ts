@@ -43,12 +43,13 @@ type ParameterFunction<TType = unknown, TName extends string = string> = (
     });
 
     it('works with three arguments', () => {
-      const three = param('three', Boolean);
+      const stringify = (v: unknown) => `-${String(v)}`;
+      const three = param('three', Boolean, stringify);
       const expected: typeof three = {
         name: 'three',
         optional,
         parser: Boolean,
-        stringify: String,
+        stringify,
       };
 
       expect(three).toMatchObject(expected);

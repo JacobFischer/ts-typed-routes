@@ -1,6 +1,5 @@
 /**
- * A parameter in a typesafe route, used to name and convert to and from
- * strings.
+ * A Base parameter in a route, used to name and convert to and from strings.
  */
 export interface BaseParameter<
   TName extends string,
@@ -8,90 +7,51 @@ export interface BaseParameter<
   TType extends any,
   TOptional extends boolean
 > {
-  name: TName;
-  optional: TOptional;
-  parser: (serialized: string) => TType;
-  stringify: (value: TType) => string;
+  readonly name: TName;
+  readonly optional: TOptional;
+  readonly parser: (serialized: string) => TType;
+  readonly stringify: (value: TType) => string;
 }
 
 /* -- Regular Parameters -- */
 
-/**
- * A parameter in a typesafe route, used to name and convert to and from
- * strings.
- */
+/** A required parameter within a route. */
 export type Parameter<
   TName extends string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TType extends any
+  TType extends unknown
 > = BaseParameter<TName, TType, false>;
 
 /**
- * A tuple for a route with a type parser.
+ * Creates a required Parameter for use in a route.
  *
  * @param name - The name of the parameter in the route.
- * @param parser - The parser that takes a string and returns a new type.
- * The return type of this function is considered the typing of this parameter
- * for future input types.
- * @param stringify - The function that parses the value from it's type to a
- * serialized string.
- * @returns A tuple [name, parser].
- */
-export function parameter<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TType extends any,
-  TName extends string
->(
-  name: TName,
-  parser: (serialized: string) => TType,
-  stringify?: (value: TType) => string,
-): Parameter<TName, TType>;
-
-/**
- * A simple parameter in a route of type string.
- *
- * @param name - The name of the parameter in the route.
- * @returns A tuple of just [name].
- */
-export function parameter<TName extends string>(
-  name: TName,
-): Parameter<TName, string>;
-
-/**
- * Creates a tuple for TypeScript to pickup the parameters in a route.
- *
- * @param name - The name of the parameter in the route.
- * @param parser - An optional type parser. Must be convertable to and from
- * strings in the Route.
- * @param stringify - The function that parses the value from it's type to a
- * serialized string.
- * @returns A tuple with at least the name of the parameter, and an optional
- * second argument of the parser.
+ * @param parser - An optional type parser. Used to convert from strings in
+ * the Route to your expected type. Defaults to `String()` (string type).
+ * @param stringify - The function that transforms the value to a string for
+ * use within routes. Defaults to `String()` (string type).
+ * @returns A parameter for a route.
  */
 export function parameter<
   TName extends string,
   TType extends unknown = string
 >(
   name: TName,
-  parser?: (serialized: string) => TType,
-  stringify?: (value: TType) => string,
+  parser: (serialized: string) => TType = String as never,
+  stringify: (value: TType) => string = String as never,
 ): Parameter<TName, TType> {
   // TType defaults to string, so defaulting the values to String functions
   // is safe, as otherwise a parser is required.
   return {
     name,
     optional: false,
-    parser: parser || (String as never),
-    stringify: stringify || (String as never),
+    parser,
+    stringify,
   };
 }
 
 /* -- Optional Parameters -- */
 
-/**
- * A parameter in a typesafe route, used to name and convert to and from
- * strings.
- */
+/** An optional parameter within a route. */
 export type OptionalParameter<
   TName extends string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,61 +59,29 @@ export type OptionalParameter<
 > = BaseParameter<TName, TType, true>;
 
 /**
- * A tuple for a route with a type parser.
+ * Creates an optional Parameter for use in a route.
  *
  * @param name - The name of the parameter in the route.
- * @param parser - The parser that takes a string and returns a new type.
- * The return type of this function is considered the typing of this parameter
- * for future input types.
- * @param stringify - The function that parses the value from it's type to a
- * serialized string.
- * @returns A tuple [name, parser].
- */
-export function optionalParameter<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TType extends any,
-  TName extends string
->(
-  name: TName,
-  parser: (serialized: string) => TType,
-  stringify?: (value: TType) => string,
-): OptionalParameter<TName, TType>;
-
-/**
- * A simple parameter in a route of type string.
- *
- * @param name - The name of the parameter in the route.
- * @returns A tuple of just [name].
- */
-export function optionalParameter<TName extends string>(
-  name: TName,
-): OptionalParameter<TName, string>;
-
-/**
- * Creates a tuple for TypeScript to pickup the optional parameters in a route.
- *
- * @param name - The name of the parameter in the route.
- * @param parser - An optional type parser. Must be convertable to and from
- * strings in the Route.
- * @param stringify - The function that parses the value from it's type to a
- * serialized string.
- * @returns A tuple with at least the name of the parameter, and an optional
- * second argument of the parser.
+ * @param parser - An optional type parser. Used to convert from strings in
+ * the Route to your expected type. Defaults to `String()` (string type).
+ * @param stringify - The function that transforms the value to a string for
+ * use within routes. Defaults to `String()` (string type).
+ * @returns A parameter for a route.
  */
 export function optionalParameter<
   TName extends string,
   TType extends unknown = string
 >(
   name: TName,
-  parser?: (serialized: string) => TType,
-  stringify?: (value: TType) => string,
+  parser: (serialized: string) => TType = String as never,
+  stringify: (value: TType) => string = String as never,
 ): OptionalParameter<TName, TType> {
   // TType defaults to string, so defaulting the values to String functions
   // is safe, as otherwise a parser is required.
   return {
     name,
     optional: true,
-    parser: parser || (String as never),
-    stringify: stringify || (String as never),
+    parser,
+    stringify,
   };
 }

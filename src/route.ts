@@ -16,6 +16,13 @@ type OnlyRouteParameters<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   BaseParameter<string, any, TOptional>
 >;
+type PathFormatter<TSegments extends RouteSegment[]> = (
+  // {} & string allows any string type, but preserves the named parameter
+  // segments for IDEs to show developers
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  parameterName: AllRouteParameters<TSegments>['name'] | ({} & string),
+  optional: boolean,
+) => string;
 type ParametersObject<T extends RouteSegment[]> = {
   [key in OnlyRouteParameters<T, true>['name']]: ReturnType<
     Extract<OnlyRouteParameters<T, true>, { name: key }>['parser']
@@ -27,6 +34,7 @@ type ParametersObject<T extends RouteSegment[]> = {
     >;
   };
 
+/** A container of functions to format and parse segments of a route. */
 export type Route<TSegments extends RouteSegment[]> = {
   /**
    * Creates a **new** route by extending new string(s) and parameter(s) onto
@@ -36,59 +44,78 @@ export type Route<TSegments extends RouteSegment[]> = {
    * @returns A new route that is this current route, with new segments on
    * the end. This route is not mutated.
    */
-  extend<TSegments2 extends RouteSegment[]>(
+  readonly extend: <TSegments2 extends RouteSegment[]>(
     ...segments: TSegments2
-  ): Route<[...TSegments, ...TSegments2]>;
+  ) => Route<[...TSegments, ...TSegments2]>;
 
   /**
    * Formats the route with the named parameters and returns the result.
    *
    * @param parameters - The named parameters to use to format with.
+   * @param options - Optional object of options.
    * @returns A string of the entire path with the values filled in.
    */
-  with(parameters: ParametersObject<TSegments>): string;
+  readonly format: (
+    parameters: ParametersObject<TSegments>,
+    options?: {
+      /** Optional character used to join all segments in the path. */
+      joiner?: string;
+      /**
+       * Optional encoder to use _after_ parameters are formatted within the
+       * route. Defaults to `encodeURIComponent`.
+       */
+      encoder?: (stringified: string) => string;
+    },
+  ) => string;
 
   /**
    * The default value(s) for parameters in this route.
    * This exists mostly as a way to check for key and types at runtime.
    */
-  defaults: Readonly<ParametersObject<TSegments>>;
+  readonly defaults: Readonly<ParametersObject<TSegments>>;
 
   /**.
    * Parses an object of key/value strings into their expected types
    *
    * @param obj - Key value pairs to parse.
+   * @param options - Optional object of options to use when parsing.
    * @returns A new object of key values pairs, where each value was
    * de-serialized.
    */
-  parse(
+  readonly parse: (
     obj: Record<string, string>,
-    options?: { useDefaults?: boolean },
-  ): ParametersObject<TSegments>;
+    options?: {
+      /** If this should use default values for keys not present. */
+      useDefaults?: boolean;
+      /**
+       * Optional encoder to use _before_ parameters are passed to their parser
+       * functions. Defaults to `decodeURIComponent`.
+       */
+      decoder?: (encoded: string) => string;
+    },
+  ) => ParametersObject<TSegments>;
 
   /**
    * Creates the raw path for this route, using parameter name in place.
    *
-   * @param formatter - An optional formatter to invoke on each parameter
-   * name. By default adds a ':' in front, and a '?' behind if optional.
+   * @param options - Options to use when formatting the path.
+   * @param options.formatter - An optional formatter to invoke on each
+   * parameter name. By default adds a ':' in front, and a '?' behind if
+   * optional.
    * E.g. `optionalParameterName` -> `:optionalParameterName?`.
    * @returns The route's path with parameter names in place.
    */
-  path(
-    formatter?: (
-      // {} & string allows any string type, but preserves the named parameter
-      // segments for IDEs to show developers
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      parameterName: AllRouteParameters<TSegments>['name'] | ({} & string),
-      optional: boolean,
-    ) => string,
-  ): string;
+  readonly path: (options?: {
+    formatter?: PathFormatter<TSegments>;
+    joiner?: string;
+  }) => string;
 };
 
 /**
  * Creates a route of static strings and parameters.
  *
- * @param segments - The segments of the route, a mix of static strings and parameters.
+ * @param segments - The segments of the route, a mix of static strings and
+ * parameters.
  * @returns A route object to help you build paths for this route.
  */
 export function route<TSegments extends RouteSegment[]>(
@@ -97,13 +124,13 @@ export function route<TSegments extends RouteSegment[]>(
   type Parameters = ParametersObject<TSegments>;
   const asString = (
     formatParameter: (p: ParameterType) => string,
-    joiner = '', // TODO: make '/'
+    joiner = '/',
   ) =>
     segments
       .map((segment) =>
         typeof segment === 'string' ? segment : formatParameter(segment),
       )
-      // .filter(Boolean)
+      .filter(Boolean)
       .join(joiner);
 
   const asObject = (
@@ -121,52 +148,59 @@ export function route<TSegments extends RouteSegment[]>(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   const defaults = asObject((parameter) => parameter.parser(''));
 
+  const defaultFormatter: PathFormatter<TSegments> = (
+    parameterName,
+    optional,
+  ) => `:${parameterName}${optional ? '?' : ''}`;
+
   return {
-    extend<TSegments extends RouteSegment[]>(...newSegments: TSegments) {
+    extend(...newSegments) {
       return route(...segments, ...newSegments);
     },
 
-    with(parameters: ParametersObject<TSegments>) {
-      return asString((p) =>
-        encodeURIComponent(
-          p.optional && !(p.name in parameters)
-            ? ''
-            : p.stringify(parameters[p.name as keyof Parameters]),
-        ),
+    format(parameters, options) {
+      const encoder = options?.encoder || encodeURIComponent;
+      return asString(
+        (p) =>
+          encoder(
+            p.optional && !(p.name in parameters)
+              ? ''
+              : p.stringify(parameters[p.name as keyof Parameters]),
+          ),
+        options?.joiner,
       );
     },
 
     defaults,
 
-    parse(
-      obj: { [key: string]: string | undefined },
-      options?: { useDefaults?: boolean },
-    ) {
+    parse(obj, options) {
       return asObject((parameter) => {
         const key = parameter.name as keyof Parameters;
-        const value = obj[parameter.name];
-        if (typeof value === 'undefined') {
-          if (options && options.useDefaults) {
+        const value = obj[key];
+        if (!(key in obj)) {
+          if (options?.useDefaults || parameter.optional) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return defaults[key];
           }
+
           throw new Error(
-            `cannot parse '${JSON.stringify(
+            `route '${asString((p) =>
+              defaultFormatter(p.name, p.optional),
+            )}' cannot parse '${JSON.stringify(
               obj,
             )}', missing expected key '${String(key)}'`,
           );
         }
 
+        const decoder = options?.decoder || decodeURIComponent;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return parameter.parser(decodeURIComponent(value));
+        return parameter.parser(decoder(value));
       });
     },
 
-    path(
-      formatter = (parameterName: string, optional: boolean) =>
-        `:${parameterName}${optional ? '?' : ''}`,
-    ) {
-      return asString((p) => formatter(p.name, p.optional));
+    path(options) {
+      const formatter = options?.formatter || defaultFormatter;
+      return asString((p) => formatter(p.name, p.optional), options?.joiner);
     },
   };
 }

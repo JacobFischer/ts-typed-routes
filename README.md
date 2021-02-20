@@ -1,6 +1,8 @@
 # ts-typed-routes
 
-Routes built and re-usable with typesafe parameters.
+Routes built and re-usable with type-safe parameters.
+
+TODO: re-write most of this
 
 ## Examples
 
@@ -13,16 +15,16 @@ import { route, parameter } from 'ts-typed-routes';
 ### Creating routes
 
 ```ts
-const dashboardRoute = route('dashboard/');
+const dashboardRoute = route('user', 'settings);
 
-const dashboardRaw = dashboardRoute.raw(); // === 'dashboard/'
-const dashboardPath = dashboardRoute.create(); // = 'dashboard/'
+const dashboardRaw = dashboardRoute.raw(); // === 'user/settings'
+const dashboardPath = dashboardRoute.create(); // = 'user/settings'
 ```
 
 ### Parameters in routes
 
 ```ts
-const userProfileRoute = route('profile/', parameter('userId'), '/', parameter('tab'));
+const userProfileRoute = route('profile', parameter('userId'), parameter('tab'));
 
 const userProfiledRaw = userProfileRoute.raw(); // === 'profile/:userId/:tab'
 const userProfilePath = userProfileRoute.create({ // === 'profile/JohnDoe1337/activity'
@@ -35,21 +37,23 @@ and requires the following type: { userId: string; tab: string }
 */
 ```
 
-### Parent Routes
+### Extending Routes
 
 ```ts
-// we want to have the page /user/:id and /user/:id/friends/:page?
+// we want to have the routes '/user/:name' and '/user/:name/friends/:page?'
 
-const userRoute = route('/user/', parameter('friends'));
-const userFriendsRoute = userRoute.concat('/friends/', Parameter("page", OptionalNumber));
+const userRoute = route('user', parameter('id'));
+const userFriendsRoute = userRoute.extend('friends', optionalParameter("page", Number));
 
+const aliceRoute = route.with({ name: 'alice' }); // 'user/alice'
+const aliceFriendsRoute = route.with({ name: 'alice', page: 1 }); // 'user/alice/friends/1'
 ```
 
 ### Typed parameters
 
 You can supply an optional function that takes a string and returns the actual
 type you want for that parameter. This is handy using built in type
-constructions such as `Number` and `Boolean` to clearly indicate to other
+functions such as `Number` and `Boolean` to clearly indicate to other
 developers what the type of that parameter should be.
 
 ```ts
@@ -68,18 +72,18 @@ a decoder function too.
 ```ts
 type WeirdObject = {
   weird?: boolean;
-  object: string;
+  stuff: string;
 };
 
 const toWeirdObject = (str: string) => JSON.parse(str) as WeirdObject;
 const fromWeirdObject = (obj: WeirdObject) => JSON.stringify(obj);
 
-const weirdObjectRoute = route('store/', parameter('weirdObject', toWeirdObject, fromWeirdObject));
+const weirdObjectRoute = route('store', parameter('weirdObject', toWeirdObject, fromWeirdObject));
 
 const weirdObjectRaw = weirdObjectRoute.raw(); // === 'store/:weirdObject'
 const weirdObjectPath = weirdObjectRoute.path({ weirdObject: {
     weird: true,
-    object: 'something',
+    stuff: 'something',
 }}); // === 'store/%7B%22weird%22%3Atrue%2C%22object%22%3A%22something%22%7D'
 // Note: the above path is a url encoded JSON string, hence so many escaped characters
 ```
