@@ -3,6 +3,7 @@
   "version": "0.0.1-pre.1",
   "description": "Zero dependency strongly typed routes and formatting for TypeScript",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": "git@github.com:JacobFischer/ts-typed-routes.git",
   "author": "Jacob Fischer <jacob.t.fischer@gmail.com>",
   "license": "MIT",
