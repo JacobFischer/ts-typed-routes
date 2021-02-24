@@ -3,16 +3,14 @@ language: node_js
 script:
   - npm run prettier:check
   - npm run lint
+  - npm run docs
   - npm run build
   - npm test
 
-after_success:
-  - npm run docs
-  - npm pack
-
 before_deploy:
   - npm run docs:predeploy
-  - npm run publish:predeploy
+  - npm run pack:predeploy
+  - npm pack
 
 deploy:
   - provider: pages
