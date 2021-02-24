@@ -35,7 +35,7 @@ type ParametersObject<T extends RouteSegment[]> = {
   };
 
 /** A container of functions to format and parse segments of a route. */
-export type Route<TSegments extends RouteSegment[]> = {
+export type Route<TSegments extends RouteSegment[] = RouteSegment[]> = {
   /**
    * Creates a **new** route by extending new string(s) and parameter(s) onto
    * the end of this route.

@@ -83,7 +83,8 @@ type RoutePropsOverrides<T extends RouteSegment[]> = {
 };
 */
 
-export interface ReactRoute<T extends RouteSegment[]> extends Route<T> {
+export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
+  extends Route<T> {
   readonly Link: React.ComponentType<
     Omit<LinkProps, 'to'> & ParametersProps<T> & RouteFormatOptions<T>
   >;
@@ -102,6 +103,18 @@ export interface ReactRoute<T extends RouteSegment[]> extends Route<T> {
   */
 
   readonly useParams: (options?: RouteParseOptions<T>) => RouteParameters<T>;
+
+  /**
+   * Creates a **new** ReactRoute by extending new string(s) and parameter(s)
+   * onto the end of this route.
+   *
+   * @param segments - The new segments to concat to the end of this route.
+   * @returns A new ReactRoute that is this current route, with new segments on
+   * the end. This route is not mutated.
+   */
+  readonly extend: <TSegments2 extends RouteSegment[]>(
+    ...segments: TSegments2
+  ) => Route<[...T, ...TSegments2]>;
 }
 
 /**.
@@ -155,6 +168,10 @@ export function reactRoute<T extends RouteSegment[]>(
     */
 
     useParams: (options) => baseRoute.parse(useParams(), options),
+
+    extend(...newSegments) {
+      return reactRoute(...segments, ...newSegments);
+    },
   };
 }
 
