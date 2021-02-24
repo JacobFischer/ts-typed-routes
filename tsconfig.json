@@ -1,8 +1,9 @@
 {
-    "compilerOptions": {
-        "target": "es3",
-        "module": "commonjs",
-        "lib": [],
-        "strict": true,
-    },
+  "compilerOptions": {
+    "target": "es3",
+    "module": "commonjs",
+    "lib": [],
+    "jsx": "react",
+    "strict": true
+  }
 }

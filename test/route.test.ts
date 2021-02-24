@@ -209,6 +209,12 @@ describe('route()', () => {
         }),
       ).toBe('X/X/X/X');
     });
+
+    it('can have empty parameters', () => {
+      const { path } = route('', 'root');
+
+      expect(path()).toBe('/root');
+    });
   });
 
   describe('.format()', () => {

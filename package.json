@@ -1,9 +1,9 @@
 {
   "name": "ts-typed-routes",
-  "version": "0.0.1",
-  "description": "Routes built and re-usable with typesafe parameters",
-  "main": "dist/index.js",
-  "repository": "git@github.com:JacobFischer/Flexi-Stack-Boilerplate.git",
+  "version": "0.0.1-pre.1",
+  "description": "Zero dependency strongly typed routes and formatting for TypeScript",
+  "main": "index.js",
+  "repository": "git@github.com:JacobFischer/ts-typed-routes.git",
   "author": "Jacob Fischer <jacob.t.fischer@gmail.com>",
   "license": "MIT",
   "private": true,
@@ -11,16 +11,22 @@
     "@types/eslint": "7.2.6",
     "@types/jest": "26.0.20",
     "@types/node": "14.14.29",
+    "@types/react": "17.0.2",
+    "@types/react-router-dom": "5.1.7",
     "@typescript-eslint/eslint-plugin": "4.15.1",
+    "@typescript-eslint/parser": "4.15.1",
     "eslint": "7.20.0",
     "eslint-config-jacobfischer": "git://github.com/JacobFischer/eslint-config.git#d3ecf89151932989003e837dd11fd8d0715d5a69",
     "eslint-config-jacobfischer-jest": "git://github.com/JacobFischer/eslint-config-jest.git#4cbb83846d4e1a29e95b406ed5d957bdab6b0824",
+    "eslint-config-jacobfischer-react": "git://github.com/JacobFischer/eslint-config-react.git#78e497042a4a7e17bec76b475674ef9386ab9cf7",
+    "eslint-config-prettier": "7.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-import-order-alphabetical": "1.0.1",
     "eslint-plugin-jest": "24.1.5",
     "eslint-plugin-jsdoc": "32.0.2",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-react": "7.22.0",
     "jest": "26.6.3",
     "jest-cli": "26.6.3",
     "npm-check-updates": "11.1.4",
@@ -31,6 +37,10 @@
     "typedoc": "0.20.25",
     "typescript": "4.1.5"
   },
+  "optionalDependencies": {
+    "react": ">=15",
+    "react-router-dom": ">=5"
+  },
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json",
     "clean": "shx rm -rf .cache/ dist/",
@@ -40,6 +50,18 @@
     "prettier": "npm run prettier:base -- --write",
     "prettier:check": "npm run prettier:base -- --check",
     "test": "jest --env=node --config ./test/jest.config.js --colors --coverage test",
+    "docs": "typedoc --out docs/ --exclude test/* --entryPoints src/index.ts",
+    "docs:predeploy": "shx touch docs/.nojekyll",
+    "publish:predeploy": "cp ./{package.json,README.md,LICENSE,CHANGELOG.md} ./dist/",
     "ncu": "ncu -u"
-  }
+  },
+  "keywords": [
+    "route",
+    "routes",
+    "path",
+    "url",
+    "ts",
+    "TypeScript",
+    "typing"
+  ]
 }

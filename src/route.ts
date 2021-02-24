@@ -56,7 +56,7 @@ export type Route<TSegments extends RouteSegment[]> = {
    * @returns A string of the entire path with the values filled in.
    */
   readonly format: (
-    parameters: ParametersObject<TSegments>,
+    parameters: Readonly<ParametersObject<TSegments>>,
     options?: {
       /** Optional character used to join all segments in the path. */
       joiner?: string;
@@ -123,14 +123,14 @@ export function route<TSegments extends RouteSegment[]>(
 ): Route<TSegments> {
   type Parameters = ParametersObject<TSegments>;
   const asString = (
-    formatParameter: (p: ParameterType) => string,
+    formatParameter: (p: ParameterType) => string | undefined,
     joiner = '/',
   ) =>
     segments
       .map((segment) =>
         typeof segment === 'string' ? segment : formatParameter(segment),
       )
-      .filter(Boolean)
+      .filter((s) => s !== undefined)
       .join(joiner);
 
   const asObject = (
@@ -162,11 +162,9 @@ export function route<TSegments extends RouteSegment[]>(
       const encoder = options?.encoder || encodeURIComponent;
       return asString(
         (p) =>
-          encoder(
-            p.optional && !(p.name in parameters)
-              ? ''
-              : p.stringify(parameters[p.name as keyof Parameters]),
-          ),
+          p.optional && !(p.name in parameters)
+            ? undefined
+            : encoder(p.stringify(parameters[p.name as keyof Parameters])),
         options?.joiner,
       );
     },

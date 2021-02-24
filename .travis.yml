@@ -5,3 +5,35 @@ script:
   - npm run lint
   - npm run build
   - npm test
+
+after_success:
+  - npm run docs
+  - npm pack
+
+before_deploy:
+  - npm run docs:predeploy
+  - npm run publish:predeploy
+
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    local_dir: docs/
+    github_token: $GH_TOKEN
+    on:
+      tags: true
+
+  - provider: releases
+    api_key: $GH_TOKEN
+    file_glob: true
+    file: "ts-typed-routes-*.tgz"
+    skip_cleanup: true
+    on:
+      tags: true
+
+  - provider: npm
+    skip_cleanup: true
+    email: "jacob.t.fischer@gmail.com"
+    api_key: $NPM_TOKEN
+    tag: experimental
+    on:
+      tags: true
