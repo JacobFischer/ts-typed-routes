@@ -114,7 +114,7 @@ export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
    */
   readonly extend: <TSegments2 extends RouteSegment[]>(
     ...segments: TSegments2
-  ) => Route<[...T, ...TSegments2]>;
+  ) => ReactRoute<[...T, ...TSegments2]>;
 }
 
 /**.
