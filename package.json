@@ -7,7 +7,6 @@
   "repository": "git@github.com:JacobFischer/ts-typed-routes.git",
   "author": "Jacob Fischer <jacob.t.fischer@gmail.com>",
   "license": "MIT",
-  "private": true,
   "devDependencies": {
     "@types/eslint": "7.2.6",
     "@types/jest": "26.0.20",
@@ -51,7 +50,7 @@
     "prettier": "npm run prettier:base -- --write",
     "prettier:check": "npm run prettier:base -- --check",
     "test": "jest --env=node --config ./test/jest.config.js --colors --coverage test",
-    "docs": "typedoc --out docs/ --exclude test/* --entryPoints src/index.ts",
+    "docs": "typedoc --includeVersion --out docs/ --exclude test/* --entryPoints src/index.ts",
     "docs:predeploy": "shx touch docs/.nojekyll",
     "pack:predeploy": "shx cp dist/*.* ./ && shx rm -rf ./.*.js",
     "ncu": "ncu -u"
