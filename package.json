@@ -10,31 +10,35 @@
   "devDependencies": {
     "@types/eslint": "7.2.6",
     "@types/jest": "26.0.20",
-    "@types/node": "14.14.29",
+    "@types/node": "14.14.31",
     "@types/react": "17.0.2",
     "@types/react-router-dom": "5.1.7",
-    "@typescript-eslint/eslint-plugin": "4.15.1",
-    "@typescript-eslint/parser": "4.15.1",
-    "eslint": "7.20.0",
-    "eslint-config-jacobfischer": "git://github.com/JacobFischer/eslint-config.git#d3ecf89151932989003e837dd11fd8d0715d5a69",
+    "@types/react-test-renderer": "17.0.1",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
+    "@typescript-eslint/parser": "4.16.1",
+    "eslint": "7.21.0",
+    "eslint-config-jacobfischer": "git://github.com/JacobFischer/eslint-config.git#fc01f89764a2ba4ca9cd6eb698dea460b2ade192",
     "eslint-config-jacobfischer-jest": "git://github.com/JacobFischer/eslint-config-jest.git#4cbb83846d4e1a29e95b406ed5d957bdab6b0824",
-    "eslint-config-jacobfischer-react": "git://github.com/JacobFischer/eslint-config-react.git#78e497042a4a7e17bec76b475674ef9386ab9cf7",
-    "eslint-config-prettier": "7.2.0",
+    "eslint-config-jacobfischer-react": "git://github.com/JacobFischer/eslint-config-react.git#7b0d030e316ecf28b2ad9f4e50fd61ccfdfb6799",
+    "eslint-config-prettier": "8.1.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-import-order-alphabetical": "1.0.1",
     "eslint-plugin-jest": "24.1.5",
-    "eslint-plugin-jsdoc": "32.0.2",
+    "eslint-plugin-jsdoc": "32.2.0",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "7.22.0",
     "jest": "26.6.3",
     "jest-cli": "26.6.3",
-    "npm-check-updates": "11.1.4",
+    "npm-check-updates": "11.1.10",
     "prettier": "2.2.1",
+    "react": "17.0.1",
+    "react-router-dom": "5.2.0",
+    "react-test-renderer": "17.0.1",
     "shx": "0.3.3",
-    "ts-jest": "26.5.1",
+    "ts-jest": "26.5.2",
     "ts-node": "9.1.1",
-    "typedoc": "0.20.25",
+    "typedoc": "0.20.28",
     "typescript": "4.1.5"
   },
   "optionalDependencies": {
@@ -50,7 +54,7 @@
     "prettier": "npm run prettier:base -- --write",
     "prettier:check": "npm run prettier:base -- --check",
     "test": "jest --env=node --config ./test/jest.config.js --colors --coverage test",
-    "docs": "typedoc --includeVersion --out docs/ --exclude test/* --entryPoints src/index.ts",
+    "docs": "typedoc src/index.ts src/react-router.tsx --includeVersion --out docs/ --exclude test/*",
     "docs:predeploy": "shx touch docs/.nojekyll",
     "pack:predeploy": "shx cp dist/*.* ./ && shx rm -rf ./.*.js",
     "ncu": "ncu -u"
@@ -67,5 +71,9 @@
   "files": [
     "*.js",
     "*.d.ts"
-  ]
+  ],
+  "dependencies": {
+    "react": ">=15",
+    "react-router-dom": ">=5"
+  }
 }

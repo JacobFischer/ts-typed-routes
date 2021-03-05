@@ -1,29 +1,30 @@
 import type { BaseParameter } from './parameter';
 
-type ValuesOf<T extends unknown[]> = T[number];
+type ValuesOf<T extends readonly unknown[]> = T[number];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ParameterType = BaseParameter<string, any, boolean>;
 type RouteSegment = string | ParameterType;
-type AllRouteParameters<T extends RouteSegment[]> = Exclude<
+type RouteSegments = ReadonlyArray<RouteSegment>;
+type AllRouteParameters<T extends RouteSegments> = Exclude<
   ValuesOf<T>,
   string
 >;
 type OnlyRouteParameters<
-  T extends RouteSegment[],
+  T extends RouteSegments,
   TOptional extends boolean
 > = Exclude<
   Exclude<ValuesOf<T>, string>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   BaseParameter<string, any, TOptional>
 >;
-type PathFormatter<TSegments extends RouteSegment[]> = (
+type PathFormatter<TSegments extends RouteSegments> = (
   // {} & string allows any string type, but preserves the named parameter
   // segments for IDEs to show developers
   // eslint-disable-next-line @typescript-eslint/ban-types
   parameterName: AllRouteParameters<TSegments>['name'] | ({} & string),
   optional: boolean,
 ) => string;
-type ParametersObject<T extends RouteSegment[]> = {
+type ParametersObject<T extends RouteSegments> = {
   [key in OnlyRouteParameters<T, true>['name']]: ReturnType<
     Extract<OnlyRouteParameters<T, true>, { name: key }>['parser']
   >;
@@ -34,8 +35,10 @@ type ParametersObject<T extends RouteSegment[]> = {
     >;
   };
 
-/** A container of functions to format and parse segments of a route. */
-export type Route<TSegments extends RouteSegment[] = RouteSegment[]> = {
+/**
+ * A immutable container of functions to format and parse segments of a route.
+ */
+export type Route<TSegments extends RouteSegments = RouteSegments> = {
   /**
    * Creates a **new** route by extending new string(s) and parameter(s) onto
    * the end of this route.
@@ -73,6 +76,9 @@ export type Route<TSegments extends RouteSegment[] = RouteSegment[]> = {
    * This exists mostly as a way to check for key and types at runtime.
    */
   readonly defaults: Readonly<ParametersObject<TSegments>>;
+
+  /** The array of segments that forms this route. */
+  readonly segments: TSegments;
 
   /**.
    * Parses an object of key/value strings into their expected types
@@ -169,6 +175,7 @@ export function route<TSegments extends RouteSegment[]>(
       );
     },
 
+    segments,
     defaults,
 
     parse(obj, options) {

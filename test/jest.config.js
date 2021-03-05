@@ -9,7 +9,7 @@ const { resolve } = require('path');
 const jestConfig = {
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{js,ts}'],
+  collectCoverageFrom: ['src/**/*.{js,ts,tsx}'],
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: [
     '\\\\node_modules\\\\', // do not test external modules
@@ -25,7 +25,7 @@ const jestConfig = {
       statements: 0,
     },
   },
-  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  moduleFileExtensions: ['ts', 'js', 'tsx', 'json', 'node'],
   preset: 'ts-jest',
   rootDir: resolve('./'),
   testEnvironment: 'node',

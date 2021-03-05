@@ -249,24 +249,6 @@ const Articles = (
 )
 ```
 
-### `<Route>`
-
-```tsx
-const pageRoute = reactRoute('page', parameter('num', Number));
-
-const Page = (props: { num: number }) => (
-  <section>
-    <h1>Page {props.num}</h1>
-    <p>Some generic page content</p>
-  </section>
-)
-
-// this will render on page/1, page/2, etc
-const PageRouter = (
-  <pageRoute.Route render={(props) => <Page num={props.match.params.num} />} />
-);
-```
-
 ### useParams
 
 ```tsx

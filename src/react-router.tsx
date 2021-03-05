@@ -1,12 +1,4 @@
 /* NOTE: this part is VERY experimental */
-
-try {
-  require.resolve('react-router-dom');
-} catch {
-  throw new Error(`Cannot find module 'react-router-dom'.
-You cannot use this part of 'ts-typed-routes' without these React packages installed too.`);
-}
-
 import * as React from 'react';
 import {
   LinkProps,
@@ -15,13 +7,13 @@ import {
   NavLinkProps,
   Redirect,
   RedirectProps,
-  /*
   Route as ReactRouterRoute,
+  /*
   RouteChildrenProps,
   RouteComponentProps,
   match,
-  RouteProps,
   */
+  RouteProps,
   useParams,
 } from 'react-router-dom';
 import type { BaseParameter } from './parameter';
@@ -59,6 +51,9 @@ type ParametersProps<
       parameters: RouteParameters<T>;
     };
 
+type RouteFormatProps<T extends RouteSegment[]> = ParametersProps<T> &
+  RouteFormatOptions<T>;
+
 /*
 type MatchOverrides<T extends RouteSegment[]> = {
   match: Omit<match<Record<string, never>>, 'params'> & {
@@ -86,21 +81,33 @@ type RoutePropsOverrides<T extends RouteSegment[]> = {
 export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
   extends Route<T> {
   readonly Link: React.ComponentType<
-    Omit<LinkProps, 'to'> & ParametersProps<T> & RouteFormatOptions<T>
+    Omit<LinkProps, 'to'> & RouteFormatProps<T>
   >;
 
   readonly NavLink: React.ComponentType<
-    Omit<NavLinkProps, 'to'> & ParametersProps<T> & RouteFormatOptions<T>
+    Omit<NavLinkProps, 'to'> & RouteFormatProps<T>
   >;
 
-  readonly RedirectFrom: React.ComponentType<Omit<RedirectProps, 'from'>>;
-  readonly RedirectTo: React.ComponentType<Omit<RedirectProps, 'to'>>;
+  readonly RedirectFromPath: React.ComponentType<Omit<RedirectProps, 'from'>>;
+  readonly RedirectToPath: React.ComponentType<Omit<RedirectProps, 'to'>>;
+
+  readonly RedirectFrom: React.ComponentType<
+    Omit<RedirectProps, 'from'> & RouteFormatProps<T>
+  >;
+  readonly RedirectTo: React.ComponentType<
+    Omit<RedirectProps, 'to'> & RouteFormatProps<T>
+  >;
 
   /*
   readonly Route: React.ComponentType<
-    Omit<RouteProps, 'path' | 'render'> & RoutePropsOverrides<T>
+    Omit<RouteProps, 'path'> & RoutePropsOverrides<T>
   >;
   */
+  readonly Route: React.ComponentType<Omit<RouteProps, 'path'>>;
+
+  readonly RouteFormatted: React.ComponentType<
+    Omit<RouteProps, 'path'> & RouteFormatProps<T>
+  >;
 
   readonly useParams: (options?: RouteParseOptions<T>) => RouteParameters<T>;
 
@@ -155,17 +162,61 @@ export function reactRoute<T extends RouteSegment[]>(
       />
     ),
 
-    RedirectFrom: (props) => <Redirect from={baseRoute.path()} {...props} />,
+    RedirectFromPath: (props) => (
+      <Redirect from={baseRoute.path()} {...props} />
+    ),
 
-    RedirectTo: (props) => <Redirect to={baseRoute.path()} {...props} />,
+    RedirectToPath: (props) => <Redirect to={baseRoute.path()} {...props} />,
+
+    RedirectFrom: ({
+      parameters = {} as RouteParameters<T>,
+      joiner,
+      encoder,
+      ...props
+    }) => (
+      <Redirect
+        from={baseRoute.format(parameters, { encoder, joiner })}
+        {...props}
+      />
+    ),
+
+    RedirectTo: ({
+      parameters = {} as RouteParameters<T>,
+      joiner,
+      encoder,
+      ...props
+    }) => (
+      <Redirect
+        to={baseRoute.format(parameters, { encoder, joiner })}
+        {...props}
+      />
+    ),
 
     /*
-    Route: ({ component, render, ...props }) => {
-      const renderWrapped = render && ((...args) => render(...args));
+    Route: ({ component, render, children, ...props }) => {
+      const renderWrapped =
+        render && ((...args: Parameters<typeof render>) => render(...args));
+      const componentWrapped =
+        component &&
+        ((...args: Parameters<typeof component>) => component(...args));
 
       return <ReactRouterRoute path={baseRoute.path()} {...props} />;
     },
     */
+
+    Route: (props) => <ReactRouterRoute path={baseRoute.path()} {...props} />,
+
+    RouteFormatted: ({
+      parameters = {} as RouteParameters<T>,
+      joiner,
+      encoder,
+      ...props
+    }) => (
+      <ReactRouterRoute
+        path={baseRoute.format(parameters, { encoder, joiner })}
+        {...(props as RouteProps)}
+      />
+    ),
 
     useParams: (options) => baseRoute.parse(useParams(), options),
 

@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-router <Link /> should render a link 1`] = `
+<a
+  href="/foo/bar"
+  onClick={[Function]}
+/>
+`;
+
+exports[`react-router <Link /> should require parameters 1`] = `
+<a
+  href="/blog/cool-id/1"
+  onClick={[Function]}
+/>
+`;
+
+exports[`react-router <NavLink /> should render a link 1`] = `
+<a
+  aria-current={null}
+  href="/foo/bar"
+  onClick={[Function]}
+/>
+`;
+
+exports[`react-router <NavLink /> should require parameters 1`] = `
+<a
+  aria-current={null}
+  href="/blog/cool-id/1"
+  onClick={[Function]}
+/>
+`;
+
+exports[`react-router <RedirectFrom /> should not require parameters when they are optional 1`] = `null`;
+
+exports[`react-router <RedirectFrom /> should redirect from a formatted route 1`] = `null`;
+
+exports[`react-router <RedirectFromPath /> should redirect from a path 1`] = `null`;
+
+exports[`react-router <RedirectTo /> should not require parameters when optional 1`] = `null`;
+
+exports[`react-router <RedirectTo /> should redirect to a formatted route 1`] = `null`;
+
+exports[`react-router <RedirectToPath /> should redirect to a path 1`] = `null`;
+
+exports[`react-router <Route /> should be the rendered route 1`] = `
+Array [
+  <strong>
+    Found me!
+  </strong>,
+  <span>
+    Catch call route!
+  </span>,
+]
+`;
+
+exports[`react-router <RouteFormatted /> should be the rendered route 1`] = `
+Array [
+  <em>
+    Found me!
+  </em>,
+  <span>
+    Catch call route!
+  </span>,
+]
+`;
+
+exports[`react-router <RouteFormatted /> should not require parameters when they are optional 1`] = `
+Array [
+  <em>
+    Found me!
+  </em>,
+  <span>
+    Catch call route!
+  </span>,
+]
+`;
+
+exports[`react-router useParams hook should parse parameters via the hook 1`] = `"{\\"str\\":\\"some-string\\",\\"num\\":1337,\\"bool\\":true}"`;
