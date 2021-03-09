@@ -1,15 +1,28 @@
 import type { BaseParameter } from './parameter';
 
 type ValuesOf<T extends readonly unknown[]> = T[number];
+
+/** Any parameter type withing a route segment. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ParameterType = BaseParameter<string, any, boolean>;
+
+/** A segment within a route. */
 export type RouteSegment = string | ParameterType;
+
+/** An immutable array that represents a route (path). */
 export type RouteSegments = ReadonlyArray<RouteSegment>;
-type AllRouteParameters<T extends RouteSegments> = Exclude<
+
+/** Extracts all the parameters parts of a route segment. */
+export type AllRouteParameters<T extends RouteSegments> = Exclude<
   ValuesOf<T>,
   string
 >;
-type OnlyRouteParameters<
+
+/**
+ * Extracts all the parameters of a route segment by if they are optional or
+ * not.
+ */
+export type OnlyRouteParameters<
   T extends RouteSegments,
   TOptional extends boolean
 > = Exclude<
@@ -17,14 +30,21 @@ type OnlyRouteParameters<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   BaseParameter<string, any, TOptional>
 >;
-type PathFormatter<TSegments extends RouteSegments> = (
+
+/** The shape of a path formatter function. */
+export type PathFormatter<TSegments extends RouteSegments> = (
   // {} & string allows any string type, but preserves the named parameter
   // segments for IDEs to show developers
   // eslint-disable-next-line @typescript-eslint/ban-types
   parameterName: AllRouteParameters<TSegments>['name'] | ({} & string),
   optional: boolean,
 ) => string;
-type ParametersObject<T extends RouteSegments> = {
+
+/**
+ * Given a route segments array this will build the expected object shape with
+ * optional parameters marked as such.
+ */
+export type ParametersObject<T extends RouteSegments> = {
   [key in OnlyRouteParameters<T, true>['name']]: ReturnType<
     Extract<OnlyRouteParameters<T, true>, { name: key }>['parser']
   >;

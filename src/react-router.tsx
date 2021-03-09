@@ -219,4 +219,4 @@ export function reactRoute<T extends RouteSegments>(
 }
 
 export * from './parameter'; // re-export
-export { ParameterType, RouteSegment, RouteSegments } from './route';
+export * from './route';
