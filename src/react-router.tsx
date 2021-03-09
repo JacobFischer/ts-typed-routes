@@ -16,23 +16,17 @@ import {
   RouteProps,
   useParams,
 } from 'react-router-dom';
-import type { BaseParameter } from './parameter';
-import { route, Route } from './route';
+import { route, Route, RouteSegments } from './route';
 
-// these are copy and pasted so they are not exported in the final bundle
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ParameterType = BaseParameter<string, any, boolean>;
-type RouteSegment = string | ParameterType;
-
-type RouteFormatOptions<T extends RouteSegment[]> = NonNullable<
+type RouteFormatOptions<T extends RouteSegments> = NonNullable<
   Parameters<Route<T>['format']>[1]
 >;
 
-type RouteParseOptions<T extends RouteSegment[]> = NonNullable<
+type RouteParseOptions<T extends RouteSegments> = NonNullable<
   Parameters<Route<T>['parse']>[1]
 >;
 
-type FilterString<T extends unknown[]> = T extends []
+type FilterString<T extends readonly unknown[]> = T extends []
   ? []
   : T extends [infer H, ...infer R]
   ? H extends string
@@ -40,10 +34,8 @@ type FilterString<T extends unknown[]> = T extends []
     : [H, ...FilterString<R>]
   : T;
 
-type RouteParameters<T extends RouteSegment[]> = Route<T>['defaults'];
-type ParametersProps<
-  T extends RouteSegment[]
-> = FilterString<T> extends never[]
+type RouteParameters<T extends RouteSegments> = Route<T>['defaults'];
+type ParametersProps<T extends RouteSegments> = FilterString<T> extends never[]
   ? {
       parameters?: RouteParameters<T>;
     }
@@ -51,25 +43,25 @@ type ParametersProps<
       parameters: RouteParameters<T>;
     };
 
-type RouteFormatProps<T extends RouteSegment[]> = ParametersProps<T> &
+type RouteFormatProps<T extends RouteSegments> = ParametersProps<T> &
   RouteFormatOptions<T>;
 
 /*
-type MatchOverrides<T extends RouteSegment[]> = {
+type MatchOverrides<T extends RouteSegments> = {
   match: Omit<match<Record<string, never>>, 'params'> & {
     params: RouteParameters<T>;
   };
 };
 
 type RouteComponentPropsOverrides<
-  T extends RouteSegment[]
+  T extends RouteSegments
 > = RouteComponentProps<Record<string, never>> & MatchOverrides<T>;
 
 type RouteChildrenPropsOverrides<
-  T extends RouteSegment[]
+  T extends RouteSegments
 > = RouteChildrenProps<Record<string, never>> & MatchOverrides<T>;
 
-type RoutePropsOverrides<T extends RouteSegment[]> = {
+type RoutePropsOverrides<T extends RouteSegments> = {
   component?: React.ComponentType<RouteComponentPropsOverrides<T>>;
   render?: (props: RouteComponentPropsOverrides<T>) => React.ReactNode;
   children?:
@@ -78,7 +70,7 @@ type RoutePropsOverrides<T extends RouteSegment[]> = {
 };
 */
 
-export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
+export interface ReactRoute<T extends RouteSegments = RouteSegments>
   extends Route<T> {
   readonly Link: React.ComponentType<
     Omit<LinkProps, 'to'> & RouteFormatProps<T>
@@ -119,7 +111,7 @@ export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
    * @returns A new ReactRoute that is this current route, with new segments on
    * the end. This route is not mutated.
    */
-  readonly extend: <TSegments2 extends RouteSegment[]>(
+  readonly extend: <TSegments2 extends RouteSegments>(
     ...segments: TSegments2
   ) => ReactRoute<[...T, ...TSegments2]>;
 }
@@ -132,7 +124,7 @@ export interface ReactRoute<T extends RouteSegment[] = RouteSegment[]>
  * parameters.
  * @returns A reactRoute object to help you build paths for this route.
  */
-export function reactRoute<T extends RouteSegment[]>(
+export function reactRoute<T extends RouteSegments>(
   ...segments: T
 ): ReactRoute<T> {
   const baseRoute = route(...segments);
@@ -227,3 +219,4 @@ export function reactRoute<T extends RouteSegment[]>(
 }
 
 export * from './parameter'; // re-export
+export { ParameterType, RouteSegment, RouteSegments } from './route';

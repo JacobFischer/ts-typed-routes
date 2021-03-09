@@ -2,9 +2,9 @@ import type { BaseParameter } from './parameter';
 
 type ValuesOf<T extends readonly unknown[]> = T[number];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ParameterType = BaseParameter<string, any, boolean>;
-type RouteSegment = string | ParameterType;
-type RouteSegments = ReadonlyArray<RouteSegment>;
+export type ParameterType = BaseParameter<string, any, boolean>;
+export type RouteSegment = string | ParameterType;
+export type RouteSegments = ReadonlyArray<RouteSegment>;
 type AllRouteParameters<T extends RouteSegments> = Exclude<
   ValuesOf<T>,
   string
