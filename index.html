@@ -1,0 +1,377 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ts-typed-routes - v0.0.1-pre.7</title>
+	<meta name="description" content="Documentation for ts-typed-routes - v0.0.1-pre.7">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">ts-typed-routes - v0.0.1-pre.7</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>ts-typed-routes - v0.0.1-pre.7</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#ts-typed-routes" id="ts-typed-routes" style="color: inherit; text-decoration: none;">
+					<h1>ts-typed-routes</h1>
+				</a>
+				<p>Zero dependency strongly typed routes and formatting for <a href="https://www.typescriptlang.org/">TypeScript</a>.</p>
+				<p>This library exposes simple functions to help build routes with parameters
+				while preserving strongly typed information and parsers.</p>
+				<p>This is a TypeScript project, although the compiled source is available in the
+				npm package without any required runtime dependencies for vanilla JavaScript.</p>
+				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+					<h2>Examples</h2>
+				</a>
+				<a href="#importing" id="importing" style="color: inherit; text-decoration: none;">
+					<h3>Importing</h3>
+				</a>
+				<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">optionalParameter</span><span style="color: #000000">, </span><span style="color: #001080">parameter</span><span style="color: #000000">, </span><span style="color: #001080">route</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;ts-typed-routes&#039;</span><span style="color: #000000">;</span>
+</code></pre>
+				<a href="#creating-routes" id="creating-routes" style="color: inherit; text-decoration: none;">
+					<h3>Creating routes</h3>
+				</a>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dashboardRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;root&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;user&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;settings)</span><span style="color: #CD3131">;</span>
+
+<span style="color: #001080">dashboardRoute</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">(); </span><span style="color: #008000">// === &#039;root/user/settings&#039;</span>
+</code></pre>
+				<a href="#parameters-in-routes" id="parameters-in-routes" style="color: inherit; text-decoration: none;">
+					<h3>Parameters in routes</h3>
+				</a>
+				<p>The true strength of this library is in modeling parameters and preserving their
+				type information via TypeScript generics.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">userProfileRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;profile&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;id&#039;</span><span style="color: #000000">), </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;tab&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">userProfileRoute</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">(); </span><span style="color: #008000">// === &#039;profile/:id/:tab&#039;</span>
+<span style="color: #001080">userProfileRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #008000">// === &#039;user/JohnDoe1337/activity&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">id:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;JohnDoe1337&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">tab:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;activity&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">});</span>
+<span style="color: #008000">/*</span>
+<span style="color: #008000">Note, the above format() function is typed using TypeScript,</span>
+<span style="color: #008000">and requires the following first arg: `{ id: string; tab: string }`</span>
+<span style="color: #008000">*/</span>
+</code></pre>
+				<a href="#extending-routes" id="extending-routes" style="color: inherit; text-decoration: none;">
+					<h3>Extending Routes</h3>
+				</a>
+				<p>Oftentimes we&#39;ll want to build hierarchical paths by extending parent routes.</p>
+				<pre><code class="language-ts"><span style="color: #008000">// we want to have the routes &#039;user/:name&#039; and &#039;user/:name/friends/:page?&#039;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">userRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;user&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;id&#039;</span><span style="color: #000000">));</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">userFriendsRoute</span><span style="color: #000000"> = </span><span style="color: #001080">userRoute</span><span style="color: #000000">.</span><span style="color: #795E26">extend</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;friends&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">optionalParameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;page&#039;</span><span style="color: #000000">, </span><span style="color: #267F99">Number</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// required arg type is { name: string }</span>
+<span style="color: #001080">route</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;alice&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;user/alice&#039;</span>
+
+<span style="color: #008000">// required arg type is { name: string, page: number }</span>
+<span style="color: #001080">route</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;alice&#039;</span><span style="color: #000000">, </span><span style="color: #001080">page:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000"> }); </span><span style="color: #008000">// &#039;user/alice/friends/1&#039;</span>
+</code></pre>
+				<a href="#typed-parameters" id="typed-parameters" style="color: inherit; text-decoration: none;">
+					<h3>Typed parameters</h3>
+				</a>
+				<p>You can supply an optional function that takes a string and returns the actual
+					type you want for that parameter. This is handy using built in type
+					functions such as <code>Number</code> and <code>Boolean</code> to clearly indicate to other
+				developers what the type of that parameter should be.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">blogRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;blog&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;posts/&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;index&#039;</span><span style="color: #000000">, </span><span style="color: #267F99">Number</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">blogRoute</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">(); </span><span style="color: #008000">// === &#039;blog/posts/:index&#039;</span>
+
+<span style="color: #008000">// required arg type is { index: number }</span>
+<span style="color: #001080">blogRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">index:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;blog/posts/5&#039;</span>
+</code></pre>
+				<a href="#optional-parameters" id="optional-parameters" style="color: inherit; text-decoration: none;">
+					<h3>Optional parameters</h3>
+				</a>
+				<p>Parameters can be marked as optional as well. These parameters are <strong>not</strong>
+				required when using <code>.format()</code>, and will be filled in with their default value.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">homeRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;home&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;information&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">optionalParameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;activeTab&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">homeRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({}); </span><span style="color: #008000">// === &#039;home/information&#039;</span>
+<span style="color: #001080">homeRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">activeTab:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;activity&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;home/information/activity&#039;</span>
+</code></pre>
+				<a href="#custom-types-parameters" id="custom-types-parameters" style="color: inherit; text-decoration: none;">
+					<h3>Custom types parameters</h3>
+				</a>
+				<p>For complex types that cannot be easily serialized from a string you can supply
+				a decoder function too.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">WeirdObject</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">weird</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #001080">stuff</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">toWeirdObject</span><span style="color: #000000"> = (</span><span style="color: #001080">str</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">(</span><span style="color: #001080">str</span><span style="color: #000000">) </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #267F99">WeirdObject</span><span style="color: #000000">;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">fromWeirdObject</span><span style="color: #000000"> = (</span><span style="color: #001080">obj</span><span style="color: #000000">: </span><span style="color: #267F99">WeirdObject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">stringify</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">weirdObjectRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;store&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;weirdObject&#039;</span><span style="color: #000000">, </span><span style="color: #001080">toWeirdObject</span><span style="color: #000000">, </span><span style="color: #001080">fromWeirdObject</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">weirdObjectRoute</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">(); </span><span style="color: #008000">// === &#039;store/:weirdObject&#039;</span>
+<span style="color: #001080">weirdObjectRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">weirdObject:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">weird:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">stuff:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;something&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">}}); </span><span style="color: #008000">// === &#039;store/%7B%22weird%22%3Atrue%2C%22object%22%3A%22something%22%7D&#039;</span>
+<span style="color: #008000">// Note: the above path is a url encoded JSON string, hence so many escaped characters</span>
+</code></pre>
+				<a href="#parsing-route-data" id="parsing-route-data" style="color: inherit; text-decoration: none;">
+					<h3>Parsing route data</h3>
+				</a>
+				<p>Many frameworks expose url parameters via <a href="https://github.com/pillarjs/path-to-regexp">path-to-regexp</a> that that will return
+					the parameters in a solely key based key/value object. You can then parse them
+				into their correct types with this library.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">noStringsRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;start&#039;</span><span style="color: #000000">, </span><span style="color: #267F99">Number</span><span style="color: #000000">), </span><span style="color: #795E26">optionalParameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;end&#039;</span><span style="color: #000000">, </span><span style="color: #267F99">Boolean</span><span style="color: #000000">));</span>
+
+<span style="color: #001080">noStringsRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">start:</span><span style="color: #000000"> </span><span style="color: #098658">1337</span><span style="color: #000000">, </span><span style="color: #001080">end:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;1337/true</span>
+
+<span style="color: #001080">noStringsRoute</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">({ </span><span style="color: #001080">start:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;777&#039;</span><span style="color: #000000">, </span><span style="color: #001080">end:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;true&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === { start: 777, end: true }</span>
+<span style="color: #001080">noStringsRoute</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">({ </span><span style="color: #001080">start:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;-50&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === { start: -50, end: false }</span>
+</code></pre>
+				<a href="#advanced-usage" id="advanced-usage" style="color: inherit; text-decoration: none;">
+					<h2>Advanced Usage</h2>
+				</a>
+				<p>These are more niche usage case examples that most developers probably will not
+				need.</p>
+				<a href="#custom-joiners" id="custom-joiners" style="color: inherit; text-decoration: none;">
+					<h3>Custom joiners</h3>
+				</a>
+				<p>The default character used to build the path is <code>/</code>, as this library is most
+				useful to build url paths. However you can specific a custom string instead.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">simpleRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;first&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;second&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;third&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">simpleRoute</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">({ </span><span style="color: #001080">joiner:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;_-_&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;first_-_second_-_third&#039;</span>
+<span style="color: #001080">simpleRoute</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({}, { </span><span style="color: #001080">joiner:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;firstsecondthird&#039;</span>
+</code></pre>
+				<a href="#encoders-and-decoders" id="encoders-and-decoders" style="color: inherit; text-decoration: none;">
+					<h3>Encoders and decoders</h3>
+				</a>
+				<p>By default, any values <em>after</em> being stringified, and <em>before</em> being parsed,
+					will be passed through an encoder and decoder function. These default to
+				<code>encodeURIComponent</code> and <code>decodeURIComponent</code> respectively.</p>
+				<a href="#encoder" id="encoder" style="color: inherit; text-decoration: none;">
+					<h4>Encoder</h4>
+				</a>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">example</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;start&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;val&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// by default this URI encodes your values</span>
+<span style="color: #001080">example</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">val:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;$$$&#039;</span><span style="color: #000000"> }); </span><span style="color: #008000">// === &#039;start/%24%24%24&#039;</span>
+
+<span style="color: #008000">// you can override this with a custom string encoder</span>
+<span style="color: #001080">example</span><span style="color: #000000">.</span><span style="color: #795E26">format</span><span style="color: #000000">({ </span><span style="color: #001080">val:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;$$$&#039;</span><span style="color: #000000"> }, { </span><span style="color: #795E26">encoder</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">str</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">str</span><span style="color: #000000"> }); </span><span style="color: #008000">// === start/$$$</span>
+</code></pre>
+				<a href="#decoder" id="decoder" style="color: inherit; text-decoration: none;">
+					<h4>Decoder</h4>
+				</a>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">test</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;contact&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;email&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">email</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;john%2Bdoe%40email.com&#039;</span><span style="color: #000000">; </span><span style="color: #008000">// encoded</span>
+<span style="color: #001080">test</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">({ </span><span style="color: #001080">email</span><span style="color: #000000"> }); </span><span style="color: #008000">// === { email: &#039;john+doe@email.com&#039; }</span>
+<span style="color: #001080">test</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">({ </span><span style="color: #001080">email</span><span style="color: #000000"> }, { </span><span style="color: #795E26">decoder</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">s</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">s</span><span style="color: #000000">.</span><span style="color: #795E26">toUpperCase</span><span style="color: #000000">() }); </span><span style="color: #008000">// === { email: &#039;JOHN%2BDOE%40EMAIL.COM&#039; }</span>
+</code></pre>
+				<a href="#parsing-incorrect-objects" id="parsing-incorrect-objects" style="color: inherit; text-decoration: none;">
+					<h3>Parsing incorrect objects</h3>
+				</a>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">lotsOfParams</span><span style="color: #000000"> = </span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">), </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">), </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">weirdData</span><span style="color: #000000"> = { </span><span style="color: #001080">bar:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;something&#039;</span><span style="color: #000000"> } </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #267F99">Record</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #267F99">string</span><span style="color: #000000">&gt;;</span>
+<span style="color: #001080">lotsOfParams</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">(</span><span style="color: #001080">weirdData</span><span style="color: #000000">, { </span><span style="color: #001080">useDefaults:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000"> }); </span><span style="color: #008000">// === { foo: &#039;&#039;, bar: &#039;something&#039;, baz: &#039;&#039; }</span>
+<span style="color: #001080">lotsOfParams</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">({}, { </span><span style="color: #001080">useDefaults:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000"> }); </span><span style="color: #008000">// === { foo: &#039;&#039;, bar: &#039;&#039;, baz: &#039;&#039; }</span>
+</code></pre>
+				<a href="#react-router" id="react-router" style="color: inherit; text-decoration: none;">
+					<h2>React-Router</h2>
+				</a>
+				<p><strong>NOTE</strong>: This feature is still very experimental.</p>
+				<p><a href="https://github.com/ReactTraining/react-router">react-router-dom</a> is listed as an optional dependency with this package.</p>
+				<p><em>If</em> you are using it, then you can import a part of this package which adds
+				useful react-router functionality. Otherwise you can ignore this feature.</p>
+				<a href="#importing-1" id="importing-1" style="color: inherit; text-decoration: none;">
+					<h3>importing</h3>
+				</a>
+				<p><strong>If you try to import <code>ts-typed-routes/react-router</code> without <code>react-router-dom</code> installed it will throw an Error</strong>.</p>
+				<p>However, if you do have it installed this is an extension library that exports
+				helpful React components wrapped with <code>route()</code> logic.</p>
+				<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">reactRoute</span><span style="color: #000000">, </span><span style="color: #001080">parameter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;ts-typed-routes/react-router&#039;</span><span style="color: #000000">;</span>
+</code></pre>
+				<p><em>Note</em>: The <code>react-router</code> file within this module re-exports all the imports
+				from the index.</p>
+				<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
+					<h3>Basic usage</h3>
+				</a>
+				<p>A <code>ReactRoute</code> exposes all the same functions as a basic <code>Route</code>, but adds some
+				react-route helpers.</p>
+				<pre><code class="language-ts"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">simple</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;simple&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;route&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">simple</span><span style="color: #000000">.</span><span style="color: #795E26">path</span><span style="color: #000000">(); </span><span style="color: #008000">// === &#039;simple/route&#039;;</span>
+</code></pre>
+				<a href="#ltlinkgt" id="ltlinkgt" style="color: inherit; text-decoration: none;">
+					<h3><code>&lt;Link&gt;</code></h3>
+				</a>
+				<pre><code class="language-tsx"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">BlogRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;blog&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;articles&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">BlogLinkText</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> (</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;span&gt;</span>
+<span style="color: #000000">    Link to </span><span style="color: #800000">&lt;</span><span style="color: #267F99">blogRoute.Link</span><span style="color: #800000">&gt;</span><span style="color: #000000">blog</span><span style="color: #800000">&lt;/</span><span style="color: #267F99">blogRoute.Link</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/span&gt;</span>
+<span style="color: #000000">);</span>
+
+<span style="color: #008000">// another way to use Link</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #001080">Link</span><span style="color: #000000">: </span><span style="color: #0070C1">BlogLink</span><span style="color: #000000"> } = </span><span style="color: #001080">BlogRoute</span><span style="color: #000000">;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">BlobLinkText2</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #800000">&lt;</span><span style="color: #267F99">BlogLink</span><span style="color: #800000">&gt;</span><span style="color: #000000">link text</span><span style="color: #800000">&lt;/</span><span style="color: #267F99">BlogLink</span><span style="color: #800000">&gt;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// NavLink too</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">BlogNavLink</span><span style="color: #000000"> = </span><span style="color: #001080">BlogRoute</span><span style="color: #000000">.</span><span style="color: #001080">NavLink</span><span style="color: #000000">;</span>
+</code></pre>
+				<a href="#with-parameters" id="with-parameters" style="color: inherit; text-decoration: none;">
+					<h4>with parameters</h4>
+				</a>
+				<pre><code class="language-tsx"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">articleRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;article&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;id&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">Articles</span><span style="color: #000000"> = (</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">articleRoute.Link</span><span style="color: #000000"> </span><span style="color: #FF0000">parameters</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #000000FF">{ </span><span style="color: #001080">id:</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;cool-cars&#039;</span><span style="color: #000000FF"> }</span><span style="color: #0000FF">}</span><span style="color: #800000">&gt;</span><span style="color: #000000">Cool cars&lt;/</span><span style="color: #800000">&lt;</span><span style="color: #267F99">ArticleRoute.Link</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">articleRoute.Link</span><span style="color: #000000"> </span><span style="color: #FF0000">parameters</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #000000FF">{ </span><span style="color: #001080">id:</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;generic-top-10&#039;</span><span style="color: #000000FF"> }</span><span style="color: #0000FF">}</span><span style="color: #800000">&gt;</span><span style="color: #000000">Generic top 10 list&lt;/</span><span style="color: #800000">&lt;</span><span style="color: #267F99">ArticleRoute.Link</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/&gt;</span>
+<span style="color: #000000">)</span>
+</code></pre>
+				<a href="#" id="" style="color: inherit; text-decoration: none;">
+					<h3><Route /></h3>
+				</a>
+				<pre><code class="language-tsx"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Switch</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;react-router-dom&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">aboutRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;about&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">helpRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;help&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">contactRoute</span><span style="color: #000000"> = </span><span style="color: #001080">helpRoute</span><span style="color: #000000">.</span><span style="color: #795E26">extend</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;contact-us&#039;</span><span style="color: #000000">); </span><span style="color: #008000">// help/contact-us</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">postsRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;posts&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;uuid&#039;</span><span style="color: #000000">));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">Routes</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> (</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;</span><span style="color: #267F99">Switch</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">aboutRoute.Route</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">{</span><span style="color: #008000">/* same as: &lt;Route path={aboutRoute.path()} /&gt; */</span><span style="color: #0000FF">}</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">helpRoute.Route</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">contactRoute.Route</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">postsRoute.Route</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/</span><span style="color: #267F99">Switch</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">)</span>
+</code></pre>
+				<a href="#-1" id="-1" style="color: inherit; text-decoration: none;">
+					<h3><Redirect /></h3>
+				</a>
+				<pre><code class="language-tsx"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Switch</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;react-router-dom&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">deprecatedRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;blog_posts&#039;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">newRoute</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;blog&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">blogPage</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;</span><span style="color: #267F99">Switch</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">deprecatedRoute.RedirectFrom</span><span style="color: #000000"> </span><span style="color: #FF0000">to</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #001080">newRoute</span><span style="color: #000000FF">.</span><span style="color: #795E26">path</span><span style="color: #000000FF">()</span><span style="color: #0000FF">}</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">deprecatedRoute.Route</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">      </span><span style="color: #0000FF">{</span><span style="color: #008000">/* could also do this, but the above redirect would catch first */</span><span style="color: #0000FF">}</span>
+<span style="color: #000000">      </span><span style="color: #800000">&lt;</span><span style="color: #267F99">newRoute.RedirectTo</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;/</span><span style="color: #267F99">deprecatedRoute.Route</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/</span><span style="color: #267F99">Switch</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#useparams" id="useparams" style="color: inherit; text-decoration: none;">
+					<h3>useParams()</h3>
+				</a>
+				<pre><code class="language-tsx"><span style="color: #008000">// have this route used somewhere in a react-router &lt;Switch&gt;</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">route</span><span style="color: #000000"> = </span><span style="color: #795E26">reactRoute</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;blog&#039;</span><span style="color: #000000">, </span><span style="color: #795E26">parameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;postId&#039;</span><span style="color: #000000">), </span><span style="color: #795E26">optionalParameter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;page&#039;</span><span style="color: #000000">, </span><span style="color: #267F99">Number</span><span style="color: #000000">));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">Component</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">postId</span><span style="color: #000000">, </span><span style="color: #0070C1">page</span><span style="color: #000000"> } = </span><span style="color: #001080">route</span><span style="color: #000000">.</span><span style="color: #795E26">useParams</span><span style="color: #000000">();</span>
+
+<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #800000">&lt;</span><span style="color: #267F99">BlogPost</span><span style="color: #000000"> </span><span style="color: #FF0000">postId</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #001080">postId</span><span style="color: #0000FF">}</span><span style="color: #000000"> </span><span style="color: #FF0000">page</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #001080">page</span><span style="color: #0000FF">}</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/src.html">src</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/src_react_router.html">src/react-<wbr>router</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
