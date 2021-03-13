@@ -1,28 +1,13 @@
 /* NOTE: this part is VERY experimental */
 import * as React from 'react';
-import {
-  LinkProps,
-  Link,
-  NavLink,
-  NavLinkProps,
-  Redirect,
-  RedirectProps,
-  Route as ReactRouterRoute,
-  /*
-  RouteChildrenProps,
-  RouteComponentProps,
-  match,
-  */
-  RouteProps,
-  useParams,
-} from 'react-router-dom';
+import * as ReactRouterDOM from 'react-router-dom';
 import { route, Route, RouteSegments } from './route';
 
-type RouteFormatOptions<T extends RouteSegments> = NonNullable<
+export type RouteFormatOptions<T extends RouteSegments> = NonNullable<
   Parameters<Route<T>['format']>[1]
 >;
 
-type RouteParseOptions<T extends RouteSegments> = NonNullable<
+export type RouteParseOptions<T extends RouteSegments> = NonNullable<
   Parameters<Route<T>['parse']>[1]
 >;
 
@@ -34,8 +19,10 @@ type FilterString<T extends readonly unknown[]> = T extends []
     : [H, ...FilterString<R>]
   : T;
 
-type RouteParameters<T extends RouteSegments> = Route<T>['defaults'];
-type ParametersProps<T extends RouteSegments> = FilterString<T> extends never[]
+export type RouteParameters<T extends RouteSegments> = Route<T>['defaults'];
+export type ParametersProps<
+  T extends RouteSegments
+> = FilterString<T> extends ReadonlyArray<never>
   ? {
       parameters?: RouteParameters<T>;
     }
@@ -43,7 +30,7 @@ type ParametersProps<T extends RouteSegments> = FilterString<T> extends never[]
       parameters: RouteParameters<T>;
     };
 
-type RouteFormatProps<T extends RouteSegments> = ParametersProps<T> &
+export type RouteFormatProps<T extends RouteSegments> = ParametersProps<T> &
   RouteFormatOptions<T>;
 
 /*
@@ -70,37 +57,110 @@ type RoutePropsOverrides<T extends RouteSegments> = {
 };
 */
 
+export type LinkProps<T extends RouteSegments> = Omit<
+  ReactRouterDOM.LinkProps,
+  'to'
+> &
+  RouteFormatProps<T>;
+
+export type NavLinkProps<T extends RouteSegments> = Omit<
+  ReactRouterDOM.NavLinkProps,
+  'to'
+> &
+  RouteFormatProps<T>;
+
+export type RedirectFromPathProps = Omit<ReactRouterDOM.RedirectProps, 'from'>;
+
+export type RedirectToPathProps = Omit<ReactRouterDOM.RedirectProps, 'to'>;
+
+export type RedirectFromProps<T extends RouteSegments> = Omit<
+  ReactRouterDOM.RedirectProps,
+  'from'
+> &
+  RouteFormatProps<T>;
+
+export type RedirectToProps<T extends RouteSegments> = Omit<
+  ReactRouterDOM.RedirectProps,
+  'to'
+> &
+  RouteFormatProps<T>;
+
+export type RouteProps = Omit<ReactRouterDOM.RouteProps, 'path'>;
+
+export type RouteFormattedProps<T extends RouteSegments> = Omit<
+  RouteProps,
+  'path'
+> &
+  RouteFormatProps<T>;
+
+/**
+ * An extension of the base `route` that exposes some useful `react-router`
+ * wrapper components.
+ *
+ * @see route
+ */
 export interface ReactRoute<T extends RouteSegments = RouteSegments>
   extends Route<T> {
-  readonly Link: React.ComponentType<
-    Omit<LinkProps, 'to'> & RouteFormatProps<T>
-  >;
+  /**
+   * A wrapper around a <Link>, but with the `to` prop directed at this
+   * formatted route.
+   */
+  readonly Link: React.ComponentType<LinkProps<T>>;
 
-  readonly NavLink: React.ComponentType<
-    Omit<NavLinkProps, 'to'> & RouteFormatProps<T>
-  >;
+  /**
+   * A wrapper around a <NavLink>, but with the `to` prop directed at this
+   * formatted route.
+   */
+  readonly NavLink: React.ComponentType<NavLinkProps<T>>;
 
-  readonly RedirectFromPath: React.ComponentType<Omit<RedirectProps, 'from'>>;
-  readonly RedirectToPath: React.ComponentType<Omit<RedirectProps, 'to'>>;
+  /**
+   * A wrapper around a <Redirect>, but with the `from` prop directed at this
+   * route's raw path.
+   */
+  readonly RedirectFromPath: React.ComponentType<RedirectFromPathProps>;
 
-  readonly RedirectFrom: React.ComponentType<
-    Omit<RedirectProps, 'from'> & RouteFormatProps<T>
-  >;
-  readonly RedirectTo: React.ComponentType<
-    Omit<RedirectProps, 'to'> & RouteFormatProps<T>
-  >;
+  /**
+   * A wrapper around a <Redirect>, but with the `to` prop directed at this
+   * route's raw path.
+   */
+  readonly RedirectToPath: React.ComponentType<RedirectToPathProps>;
+
+  /**
+   * A wrapper around a <Redirect>, but with the `from` prop directed at this
+   * formatted route.
+   */
+  readonly RedirectFrom: React.ComponentType<RedirectFromProps<T>>;
+
+  /**
+   * A wrapper around a <Redirect>, but with the `to` prop directed at this
+   * formatted route.
+   */
+  readonly RedirectTo: React.ComponentType<RedirectToProps<T>>;
 
   /*
   readonly Route: React.ComponentType<
     Omit<RouteProps, 'path'> & RoutePropsOverrides<T>
   >;
   */
-  readonly Route: React.ComponentType<Omit<RouteProps, 'path'>>;
 
-  readonly RouteFormatted: React.ComponentType<
-    Omit<RouteProps, 'path'> & RouteFormatProps<T>
-  >;
+  /**
+   * A wrapper around a <Route>, with the `path` prop automatically set to the
+   * route's raw path.
+   *
+   * **Note**: the props route exposes via `match` are not transformed at this
+   * time.
+   */
+  readonly Route: React.ComponentType<RouteProps>;
 
+  /**
+   * A wrapper around a <Route>, with the `path` prop set to a formatted route.
+   */
+  readonly RouteFormatted: React.ComponentType<RouteFormattedProps<T>>;
+
+  /**
+   * A wrapper around the `useParams` hook, but with all usually string values
+   * transformed via the decoder function for each parameter.
+   */
   readonly useParams: (options?: RouteParseOptions<T>) => RouteParameters<T>;
 
   /**
@@ -136,7 +196,7 @@ export function reactRoute<T extends RouteSegments>(
       encoder,
       ...props
     }) => (
-      <Link
+      <ReactRouterDOM.Link
         to={baseRoute.format(parameters, { encoder, joiner })}
         {...props}
       />
@@ -148,17 +208,19 @@ export function reactRoute<T extends RouteSegments>(
       encoder,
       ...props
     }) => (
-      <NavLink
+      <ReactRouterDOM.NavLink
         to={baseRoute.format(parameters, { encoder, joiner })}
         {...props}
       />
     ),
 
     RedirectFromPath: (props) => (
-      <Redirect from={baseRoute.path()} {...props} />
+      <ReactRouterDOM.Redirect from={baseRoute.path()} {...props} />
     ),
 
-    RedirectToPath: (props) => <Redirect to={baseRoute.path()} {...props} />,
+    RedirectToPath: (props) => (
+      <ReactRouterDOM.Redirect to={baseRoute.path()} {...props} />
+    ),
 
     RedirectFrom: ({
       parameters = {} as RouteParameters<T>,
@@ -166,7 +228,7 @@ export function reactRoute<T extends RouteSegments>(
       encoder,
       ...props
     }) => (
-      <Redirect
+      <ReactRouterDOM.Redirect
         from={baseRoute.format(parameters, { encoder, joiner })}
         {...props}
       />
@@ -178,7 +240,7 @@ export function reactRoute<T extends RouteSegments>(
       encoder,
       ...props
     }) => (
-      <Redirect
+      <ReactRouterDOM.Redirect
         to={baseRoute.format(parameters, { encoder, joiner })}
         {...props}
       />
@@ -196,7 +258,9 @@ export function reactRoute<T extends RouteSegments>(
     },
     */
 
-    Route: (props) => <ReactRouterRoute path={baseRoute.path()} {...props} />,
+    Route: (props) => (
+      <ReactRouterDOM.Route path={baseRoute.path()} {...props} />
+    ),
 
     RouteFormatted: ({
       parameters = {} as RouteParameters<T>,
@@ -204,13 +268,14 @@ export function reactRoute<T extends RouteSegments>(
       encoder,
       ...props
     }) => (
-      <ReactRouterRoute
+      <ReactRouterDOM.Route
         path={baseRoute.format(parameters, { encoder, joiner })}
         {...(props as RouteProps)}
       />
     ),
 
-    useParams: (options) => baseRoute.parse(useParams(), options),
+    useParams: (options) =>
+      baseRoute.parse(ReactRouterDOM.useParams(), options),
 
     extend(...newSegments) {
       return reactRoute(...segments, ...newSegments);

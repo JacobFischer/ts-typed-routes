@@ -239,17 +239,57 @@ const BlogNavLink = BlogRoute.NavLink;
 #### with parameters
 
 ```tsx
-const ArticleRoute = reactRoute('article', parameter('id'));
+const articleRoute = reactRoute('article', parameter('id'));
 
 const Articles = (
   <>
-    <ArticleRoute.Link parameters={{ id: 'cool-cars' }}>Cool cars</<ArticleRoute.Link>
-    <ArticleRoute.Link parameters={{ id: 'generic-top-10' }}>Generic top 10 list</<ArticleRoute.Link>
+    <articleRoute.Link parameters={{ id: 'cool-cars' }}>Cool cars</<ArticleRoute.Link>
+    <articleRoute.Link parameters={{ id: 'generic-top-10' }}>Generic top 10 list</<ArticleRoute.Link>
   </>
 )
 ```
 
-### useParams
+### <Route />
+
+```tsx
+import { Switch } from 'react-router-dom';
+
+const aboutRoute = reactRoute('about');
+const helpRoute = reactRoute('help');
+const contactRoute = helpRoute.extend('contact-us'); // help/contact-us
+const postsRoute = reactRoute('posts', parameter('uuid'));
+
+const Routes = () => (
+  <Switch>
+    <aboutRoute.Route />
+    {/* same as: <Route path={aboutRoute.path()} /> */}
+    <helpRoute.Route />
+    <contactRoute.Route />
+    <postsRoute.Route />
+  </Switch>
+)
+```
+
+### <Redirect />
+
+```tsx
+import { Switch } from 'react-router-dom';
+
+const deprecatedRoute = reactRoute('blog_posts');
+const newRoute = reactRoute('blog');
+
+const blogPage = () => {
+  <Switch>
+    <deprecatedRoute.RedirectFrom to={newRoute.path()}>
+    <deprecatedRoute.Route>
+      {/* could also do this, but the above redirect would catch first */}
+      <newRoute.RedirectTo />
+    </deprecatedRoute.Route>
+  </Switch>
+}
+```
+
+### useParams()
 
 ```tsx
 // have this route used somewhere in a react-router <Switch>

@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-router <Link /> should not require parameters for string only routes 1`] = `
+<a
+  href="/alpha/beta/gamma"
+  onClick={[Function]}
+/>
+`;
+
 exports[`react-router <Link /> should render a link 1`] = `
 <a
   href="/foo/bar"
@@ -10,6 +17,14 @@ exports[`react-router <Link /> should render a link 1`] = `
 exports[`react-router <Link /> should require parameters 1`] = `
 <a
   href="/blog/cool-id/1"
+  onClick={[Function]}
+/>
+`;
+
+exports[`react-router <NavLink /> should not require parameters for string only routes 1`] = `
+<a
+  aria-current={null}
+  href="/alpha/beta/gamma"
   onClick={[Function]}
 />
 `;

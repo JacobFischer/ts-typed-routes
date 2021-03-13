@@ -84,6 +84,25 @@ describe('react-router', () => {
         expect(anchor.props.href).toBe('/foo/bar');
       });
 
+      it('should not require parameters for string only routes', () => {
+        const parameterRoute = reactRoute('alpha', 'beta', 'gamma');
+
+        const Component = parameterRoute[keyLink];
+        const rendered = create(
+          <StaticRouter>
+            <Component />
+          </StaticRouter>,
+        );
+
+        expect(rendered.toJSON()).toMatchSnapshot();
+
+        const anchors = rendered.root.findAllByType('a');
+        expect(anchors.length).toBe(1);
+        const [anchor] = anchors;
+        expect(anchor).toBeTruthy();
+        expect(anchor.props.href).toBe('/alpha/beta/gamma');
+      });
+
       it('should require parameters', () => {
         const parameterRoute = reactRoute(
           'blog',

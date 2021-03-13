@@ -58,7 +58,7 @@ export type ParametersObject<T extends RouteSegments> = {
 /**
  * A immutable container of functions to format and parse segments of a route.
  */
-export type Route<TSegments extends RouteSegments = RouteSegments> = {
+export interface Route<TSegments extends RouteSegments = RouteSegments> {
   /**
    * Creates a **new** route by extending new string(s) and parameter(s) onto
    * the end of this route.
@@ -135,7 +135,7 @@ export type Route<TSegments extends RouteSegments = RouteSegments> = {
     formatter?: PathFormatter<TSegments>;
     joiner?: string;
   }) => string;
-};
+}
 
 /**
  * Creates a route of static strings and parameters.
